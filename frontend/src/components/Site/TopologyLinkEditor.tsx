@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUpdateTopology } from "@/hooks/Site/useSiteTopology";
+import { useIsEditing } from "@/stores/editModeStore";
 import type { BaseStation, TopologyLink } from "@/types/site";
 
 export function TopologyLinkEditor({
@@ -16,6 +17,7 @@ export function TopologyLinkEditor({
   links: TopologyLink[];
 }) {
   const update = useUpdateTopology(siteId);
+  const isEditing = useIsEditing();
   const [source, setSource] = useState("");
   const [target, setTarget] = useState("");
   const [bandwidth, setBandwidth] = useState("");
@@ -54,6 +56,7 @@ export function TopologyLinkEditor({
 
   return (
     <div>
+      {isEditing && (
       <form onSubmit={addLink} className="flex flex-wrap items-center gap-2 mb-3">
         <select
           className="h-9 rounded-md border border-gray-300 bg-white px-2 text-sm"
@@ -92,6 +95,7 @@ export function TopologyLinkEditor({
           + 新增連線
         </Button>
       </form>
+      )}
       {links.length === 0 ? (
         <p className="text-sm text-gray-400">尚無拓樸連線。</p>
       ) : (
@@ -109,13 +113,15 @@ export function TopologyLinkEditor({
                   <span className="ml-2 text-gray-500">{l.bandwidth}</span>
                 )}
               </span>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => removeLink(l.id)}
-              >
-                移除
-              </Button>
+              {isEditing && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => removeLink(l.id)}
+                >
+                  移除
+                </Button>
+              )}
             </li>
           ))}
         </ul>

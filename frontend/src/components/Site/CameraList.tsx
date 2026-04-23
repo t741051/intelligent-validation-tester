@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useSiteCameras } from "@/hooks/Site/useSiteCameras";
+import { useIsEditing } from "@/stores/editModeStore";
 import type { SiteCamera } from "@/types/site";
 
 import { CameraFormDialog } from "./CameraFormDialog";
@@ -26,6 +27,7 @@ export function CameraList({ siteId }: { siteId: string }) {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<SiteCamera | null>(null);
   const [playing, setPlaying] = useState<SiteCamera | null>(null);
+  const isEditing = useIsEditing();
 
   return (
     <>
@@ -33,9 +35,11 @@ export function CameraList({ siteId }: { siteId: string }) {
         <div className="text-sm text-gray-500">
           {cameras.length} 個攝影機
         </div>
-        <Button size="sm" onClick={() => { setEditing(null); setFormOpen(true); }}>
-          <Plus className="w-4 h-4 mr-2" /> 新增攝影機
-        </Button>
+        {isEditing && (
+          <Button size="sm" onClick={() => { setEditing(null); setFormOpen(true); }}>
+            <Plus className="w-4 h-4 mr-2" /> 新增攝影機
+          </Button>
+        )}
       </div>
       {isLoading ? (
         <div className="text-sm text-gray-400">載入中…</div>
@@ -67,20 +71,24 @@ export function CameraList({ siteId }: { siteId: string }) {
                     播放
                   </Button>
                 )}
-                <Button
-                  size="icon" variant="ghost" aria-label="編輯"
-                  onClick={() => { setEditing(c); setFormOpen(true); }}
-                >
-                  <Pencil className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="icon" variant="ghost" aria-label="刪除"
-                  onClick={() => {
-                    if (confirm(`刪除攝影機 ${c.name}?`)) void remove(c.id);
-                  }}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                {isEditing && (
+                  <>
+                    <Button
+                      size="icon" variant="ghost" aria-label="編輯"
+                      onClick={() => { setEditing(c); setFormOpen(true); }}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      size="icon" variant="ghost" aria-label="刪除"
+                      onClick={() => {
+                        if (confirm(`刪除攝影機 ${c.name}?`)) void remove(c.id);
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           ))}

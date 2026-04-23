@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 
 import { PageHeader } from "@/components/common/PageHeader";
 import { useSites } from "@/hooks/Site/useSites";
+import { useEditModeStore, useIsEditing } from "@/stores/editModeStore";
 import type { Region } from "@/types/common";
 
+import { EditModeToggle } from "./EditModeToggle";
 import { SiteCreateForm } from "./SiteCreateForm";
 import { SiteDetail } from "./SiteDetail";
 import { SiteList } from "./SiteList";
@@ -17,7 +19,14 @@ const TITLE: Record<string, string> = {
 export function SiteManagementContainer({ region }: { region: Region }) {
   const { data, isLoading } = useSites(region);
   const sites = data?.items ?? [];
+  const isEditing = useIsEditing();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // Reset to view mode on mount/unmount so edit state never bleeds to other pages.
+  useEffect(() => {
+    useEditModeStore.getState().setEditing(false);
+    return () => useEditModeStore.getState().setEditing(false);
+  }, []);
 
   useEffect(() => {
     if (!selectedId && sites.length > 0) {
@@ -33,17 +42,20 @@ export function SiteManagementContainer({ region }: { region: Region }) {
   return (
     <>
       <PageHeader title={TITLE[region] ?? "場域管理"}>
-        <SiteCreateForm region={region} />
+        <EditModeToggle />
       </PageHeader>
       {isLoading ? (
         <div className="text-gray-400">載入中…</div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4">
-          <SiteList
-            sites={sites}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-4">
+          <div className="space-y-3">
+            {isEditing && <SiteCreateForm region={region} />}
+            <SiteList
+              sites={sites}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+            />
+          </div>
           <div>
             {selected ? (
               <SiteDetail site={selected} />

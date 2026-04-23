@@ -2,9 +2,12 @@
 import { Settings2 } from "lucide-react";
 import { useState } from "react";
 
+import { CollapsibleCard } from "@/components/common/CollapsibleCard";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSiteTopology } from "@/hooks/Site/useSiteTopology";
+import { useIsEditing } from "@/stores/editModeStore";
 import type { Site } from "@/types/site";
 
 import { CameraList } from "./CameraList";
@@ -22,29 +25,30 @@ export function SiteDetail({ site }: { site: Site }) {
   const links = data?.links ?? [];
   const gnbStations = stations.filter((s) => s.node_type === "gnb");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const isEditing = useIsEditing();
 
   return (
     <div className="space-y-4">
       <Card>
-        <CardHeader>
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <CardTitle>{site.name}</CardTitle>
-              <div className="text-sm text-gray-500 space-x-3 mt-1">
-                <span>環境:{ENV_LABEL[site.environment] ?? site.environment}</span>
-                <span>地址:{site.address || "—"}</span>
-                {site.floor_plan_url ? (
-                  <span className="text-green-700">已設定平面圖</span>
-                ) : (
-                  <span className="text-gray-400">未設定平面圖(使用網格底)</span>
-                )}
-              </div>
-            </div>
+        <CardContent className="py-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0 flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span className="text-lg font-semibold truncate">{site.name}</span>
+            <Badge tone={site.environment === "outdoor" ? "blue" : "gray"}>
+              {ENV_LABEL[site.environment] ?? site.environment}
+            </Badge>
+            {site.address && (
+              <span className="text-sm text-gray-500 truncate">{site.address}</span>
+            )}
+            <Badge tone={site.floor_plan_url ? "green" : "gray"}>
+              {site.floor_plan_url ? "已設平面圖" : "網格底"}
+            </Badge>
+          </div>
+          {isEditing && (
             <Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
               <Settings2 className="w-4 h-4 mr-2" /> 場域設定
             </Button>
-          </div>
-        </CardHeader>
+          )}
+        </CardContent>
       </Card>
       <SiteSettingsDialog
         open={settingsOpen}
@@ -52,65 +56,59 @@ export function SiteDetail({ site }: { site: Site }) {
         site={site}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>邏輯拓樸</CardTitle>
-            <p className="text-xs text-gray-500">
-              SMO → RIC → gNB 層級關係,不代表實際位置
-            </p>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="text-gray-400">載入中…</div>
-            ) : (
-              <TopologyCanvas stations={stations} links={links} />
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
+      <Card>
+        <CardHeader className="pb-2">
+          <div className="flex items-baseline justify-between">
             <CardTitle>實體地圖</CardTitle>
             <p className="text-xs text-gray-500">
-              gNB 相對位置 · {gnbStations.length} 個
+              gNB {gnbStations.length} · 點攝影機圖示播放
             </p>
-          </CardHeader>
-          <CardContent>
-            <SiteLayoutCanvas
-              siteId={site.id}
-              floorPlanUrl={site.floor_plan_url || undefined}
-              stations={stations}
-            />
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader><CardTitle>網元</CardTitle></CardHeader>
-          <CardContent>
-            <StationList siteId={site.id} stations={stations} />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader><CardTitle>拓樸連線</CardTitle></CardHeader>
-          <CardContent>
-            <TopologyLinkEditor
-              siteId={site.id}
-              stations={stations}
-              links={links}
-            />
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader><CardTitle>攝影機</CardTitle></CardHeader>
+          </div>
+        </CardHeader>
         <CardContent>
-          <CameraList siteId={site.id} />
+          <SiteLayoutCanvas
+            siteId={site.id}
+            floorPlanUrl={site.floor_plan_url || undefined}
+            stations={stations}
+          />
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_2fr] gap-4">
+        <CollapsibleCard
+          title="邏輯拓樸"
+          subtitle="SMO → RIC → gNB"
+        >
+          {isLoading ? (
+            <div className="text-gray-400 text-sm">載入中…</div>
+          ) : (
+            <TopologyCanvas stations={stations} links={links} />
+          )}
+        </CollapsibleCard>
+
+        <CollapsibleCard
+          title="網元"
+          subtitle={`${stations.length} 個`}
+        >
+          <StationList siteId={site.id} stations={stations} />
+        </CollapsibleCard>
+      </div>
+
+      <CollapsibleCard title="攝影機">
+        <CameraList siteId={site.id} />
+      </CollapsibleCard>
+
+      <CollapsibleCard
+        title="拓樸連線"
+        subtitle={`${links.length} 條`}
+        defaultOpen={false}
+      >
+        <TopologyLinkEditor
+          siteId={site.id}
+          stations={stations}
+          links={links}
+        />
+      </CollapsibleCard>
     </div>
   );
 }

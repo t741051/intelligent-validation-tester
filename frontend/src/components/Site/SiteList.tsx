@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/cn";
 import { useDeleteSite } from "@/hooks/Site/useSites";
+import { useIsEditing } from "@/stores/editModeStore";
 import type { Site } from "@/types/site";
 
 const ENV_LABEL: Record<string, string> = { indoor: "室內", outdoor: "室外" };
@@ -18,6 +19,7 @@ export function SiteList({
   onSelect: (id: string) => void;
 }) {
   const del = useDeleteSite();
+  const isEditing = useIsEditing();
 
   if (sites.length === 0) {
     return (
@@ -51,18 +53,20 @@ export function SiteList({
                 {ENV_LABEL[s.environment] ?? s.environment}
               </Badge>
             </div>
-            <div className="mt-2 flex justify-end">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (confirm(`刪除場域「${s.name}」?`)) del.mutate(s.id);
-                }}
-              >
-                刪除
-              </Button>
-            </div>
+            {isEditing && (
+              <div className="mt-2 flex justify-end">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (confirm(`刪除場域「${s.name}」?`)) del.mutate(s.id);
+                  }}
+                >
+                  刪除
+                </Button>
+              </div>
+            )}
           </Card>
         );
       })}

@@ -25,8 +25,8 @@ type Props = {
 
 export function CameraFormDialog({ open, onOpenChange, isSubmitting, existing, onSubmit }: Props) {
   const [form, setForm] = useState<SiteCameraInput>(DEFAULT);
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+  const [x, setX] = useState("50");
+  const [y, setY] = useState("50");
 
   useEffect(() => {
     if (!open) return;
@@ -39,19 +39,23 @@ export function CameraFormDialog({ open, onOpenChange, isSubmitting, existing, o
         resolution: existing.resolution,
         fps: existing.fps,
       });
-      setLat(existing.location ? String(existing.location.lat) : "");
-      setLng(existing.location ? String(existing.location.lng) : "");
+      const loc = existing.location as { x?: number; y?: number } | null;
+      setX(loc?.x != null ? String(loc.x) : "50");
+      setY(loc?.y != null ? String(loc.y) : "50");
     } else {
       setForm(DEFAULT);
-      setLat("");
-      setLng("");
+      setX("50");
+      setY("50");
     }
   }, [open, existing]);
 
   const submit = () => {
     if (!form.name) return;
-    const loc = lat && lng ? { lat: Number(lat), lng: Number(lng) } : null;
-    void onSubmit({ ...form, location: loc });
+    const loc =
+      x !== "" && y !== ""
+        ? { x: Number(x), y: Number(y) }
+        : null;
+    void onSubmit({ ...form, location: loc as unknown as typeof form.location });
   };
 
   const isEdit = !!existing;
@@ -94,19 +98,19 @@ export function CameraFormDialog({ open, onOpenChange, isSubmitting, existing, o
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Lat</label>
+              <label className="block text-sm font-medium mb-1">地圖 X (%)</label>
               <Input
-                type="number" step="0.0001"
-                value={lat}
-                onChange={(e) => setLat(e.target.value)}
+                type="number" min={0} max={100} step="0.1"
+                value={x}
+                onChange={(e) => setX(e.target.value)}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Lng</label>
+              <label className="block text-sm font-medium mb-1">地圖 Y (%)</label>
               <Input
-                type="number" step="0.0001"
-                value={lng}
-                onChange={(e) => setLng(e.target.value)}
+                type="number" min={0} max={100} step="0.1"
+                value={y}
+                onChange={(e) => setY(e.target.value)}
               />
             </div>
             <div>

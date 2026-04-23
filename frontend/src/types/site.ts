@@ -75,7 +75,8 @@ export type SiteCamera = {
   id: string;
   site: string;
   name: string;
-  location: { lat: number; lng: number } | null;
+  // Relative position on the site layout canvas, 0-100 %.
+  location: { x: number; y: number } | null;
   rtsp_url: string;
   stream_url: string;
   hls_url: string | null;
@@ -87,7 +88,7 @@ export type SiteCamera = {
 
 export type SiteCameraInput = {
   name: string;
-  location?: { lat: number; lng: number } | null;
+  location?: { x: number; y: number } | null;
   rtsp_url?: string;
   stream_url?: string;
   resolution?: string;

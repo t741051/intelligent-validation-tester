@@ -8,6 +8,7 @@ import {
   useCreateStation,
   useDeleteStation,
 } from "@/hooks/Site/useSiteTopology";
+import { useIsEditing } from "@/stores/editModeStore";
 import type { BaseStation } from "@/types/site";
 
 import { StationFormDialog } from "./StationFormDialog";
@@ -34,14 +35,17 @@ export function StationList({
   const createStation = useCreateStation(siteId);
   const deleteStation = useDeleteStation(siteId);
   const [formOpen, setFormOpen] = useState(false);
+  const isEditing = useIsEditing();
 
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
         <div className="text-sm text-gray-500">{stations.length} 個網元</div>
-        <Button size="sm" onClick={() => setFormOpen(true)}>
-          <Plus className="w-4 h-4 mr-2" /> 新增網元
-        </Button>
+        {isEditing && (
+          <Button size="sm" onClick={() => setFormOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" /> 新增網元
+          </Button>
+        )}
       </div>
       {stations.length === 0 ? (
         <p className="text-sm text-gray-400">此場域尚無網元。</p>
@@ -84,17 +88,19 @@ export function StationList({
                     </Badge>
                   </td>
                   <td className="py-2 text-right">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        if (confirm(`移除網元 ${s.code}?`)) {
-                          deleteStation.mutate(s.code);
-                        }
-                      }}
-                    >
-                      刪除
-                    </Button>
+                    {isEditing && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          if (confirm(`移除網元 ${s.code}?`)) {
+                            deleteStation.mutate(s.code);
+                          }
+                        }}
+                      >
+                        刪除
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}
