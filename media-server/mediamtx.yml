@@ -1,0 +1,35 @@
+logLevel: info
+logDestinations: [stdout]
+
+api: yes
+apiAddress: :9997
+
+authInternalUsers:
+  - user: any
+    pass:
+    ips: []
+    permissions:
+      - action: api
+      - action: publish
+      - action: read
+      - action: playback
+
+rtsp: yes
+rtspAddress: :8554
+
+hls: yes
+hlsAddress: :8888
+hlsAllowOrigin: "*"
+hlsVariant: lowLatency
+hlsSegmentCount: 7
+hlsSegmentDuration: 1s
+hlsPartDuration: 200ms
+hlsSegmentMaxSize: 50M
+
+webrtc: no
+
+paths:
+  all_others:
+    source: publisher
+    sourceOnDemand: no
+    rtspTransport: tcp

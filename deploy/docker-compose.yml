@@ -1,0 +1,97 @@
+services:
+  postgres:
+    image: timescale/timescaledb:latest-pg16
+    container_name: ivt-postgres
+    environment:
+      POSTGRES_DB: ivt
+      POSTGRES_USER: ivt
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ivtpass}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ivt"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: ivt-redis
+    volumes: [redis_data:/data]
+    ports: ["6379:6379"]
+
+  minio:
+    image: minio/minio:latest
+    container_name: ivt-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes: [minio_data:/data]
+    ports: ["9000:9000", "9001:9001"]
+
+  mediamtx:
+    image: bluenviron/mediamtx:latest
+    container_name: ivt-mediamtx
+    volumes:
+      - ../media-server/mediamtx.yml:/mediamtx.yml
+    ports: ["8554:8554", "8888:8888", "9997:9997"]
+
+  backend-web:
+    build: ../backend
+    container_name: ivt-backend-web
+    command: gunicorn config.wsgi --bind 0.0.0.0:8000 --workers 3
+    env_file: ../backend/.env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }
+      minio: { condition: service_started }
+    ports: ["8000:8000"]
+
+  backend-ws:
+    build: ../backend
+    container_name: ivt-backend-ws
+    command: daphne -b 0.0.0.0 -p 8001 config.asgi:application
+    env_file: ../backend/.env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }
+    ports: ["8001:8001"]
+
+  celery-worker:
+    build: ../backend
+    container_name: ivt-celery
+    command: celery -A config worker -l info
+    env_file: ../backend/.env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }
+
+  celery-beat:
+    build: ../backend
+    container_name: ivt-celery-beat
+    command: celery -A config beat -l info
+    env_file: ../backend/.env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }
+
+  frontend:
+    build: ../frontend
+    container_name: ivt-frontend
+    env_file: ../frontend/.env.local
+    depends_on: [backend-web]
+    ports: ["3000:3000"]
+
+  nginx:
+    image: nginx:alpine
+    container_name: ivt-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports: ["8080:80"]
+    depends_on: [frontend, backend-web, backend-ws, mediamtx]
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
