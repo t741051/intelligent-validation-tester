@@ -41,7 +41,7 @@ export function DutDetailCard({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <CardTitle>{dut.name}</CardTitle>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-white/60">
               {dut.type} · <span className="font-mono text-xs">{dut.endpoint}</span>
             </p>
           </div>
@@ -53,21 +53,21 @@ export function DutDetailCard({
           <h4 className="font-medium mb-3">連接資訊</h4>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <div className="text-gray-600">資料格式</div>
+              <div className="text-white/70">資料格式</div>
               <div className="mt-1">{dut.data_format || "未知"}</div>
             </div>
             <div>
-              <div className="text-gray-600">回應時間</div>
+              <div className="text-white/70">回應時間</div>
               <div className="mt-1">
                 {dut.response_time_ms != null ? `${dut.response_time_ms}ms` : "-"}
               </div>
             </div>
             <div>
-              <div className="text-gray-600">最後檢查時間</div>
+              <div className="text-white/70">最後檢查時間</div>
               <div className="mt-1">{formatDate(dut.last_check)}</div>
             </div>
             <div>
-              <div className="text-gray-600">部署場域</div>
+              <div className="text-white/70">部署場域</div>
               <div className="mt-1 flex items-center gap-2">
                 <span>{dut.site_name ?? "-"}</span>
                 {dut.site_environment && (
@@ -88,15 +88,15 @@ export function DutDetailCard({
               return (
                 <div
                   key={iface}
-                  className="flex items-center justify-between p-3 border rounded-lg"
+                  className="flex items-center justify-between p-3 border rounded-item"
                 >
                   <div className="flex items-center gap-3">
-                    {s === "pass" && <CheckCircle2 className="w-5 h-5 text-green-600" />}
-                    {s === "fail" && <XCircle className="w-5 h-5 text-red-600" />}
-                    {s === "none" && <Circle className="w-5 h-5 text-gray-400" />}
+                    {s === "pass" && <CheckCircle2 className="w-5 h-5 text-mint-300" />}
+                    {s === "fail" && <XCircle className="w-5 h-5 text-danger" />}
+                    {s === "none" && <Circle className="w-5 h-5 text-white/40" />}
                     <div>
                       <div className="text-sm font-medium">{iface} 介面</div>
-                      <div className="text-xs text-gray-600">{copy.desc}</div>
+                      <div className="text-xs text-white/70">{copy.desc}</div>
                     </div>
                   </div>
                   <Badge tone={copy.tone}>{copy.label}</Badge>
@@ -104,7 +104,7 @@ export function DutDetailCard({
               );
             })}
             {dut.interfaces.length === 0 && (
-              <p className="text-sm text-gray-400">此設備未設定任何介面</p>
+              <p className="text-sm text-white/40">此設備未設定任何介面</p>
             )}
           </div>
         </section>

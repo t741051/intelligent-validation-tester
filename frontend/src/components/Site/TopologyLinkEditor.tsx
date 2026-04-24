@@ -59,7 +59,7 @@ export function TopologyLinkEditor({
       {isEditing && (
       <form onSubmit={addLink} className="flex flex-wrap items-center gap-2 mb-3">
         <select
-          className="h-9 rounded-md border border-gray-300 bg-white px-2 text-sm"
+          className="h-9 rounded-item border border-white/20 bg-navy-400 text-white px-2 text-sm"
           value={source}
           onChange={(e) => setSource(e.target.value)}
           required
@@ -69,9 +69,9 @@ export function TopologyLinkEditor({
             <option key={s.id} value={s.id}>{s.code}</option>
           ))}
         </select>
-        <span className="text-gray-400">→</span>
+        <span className="text-white/40">→</span>
         <select
-          className="h-9 rounded-md border border-gray-300 bg-white px-2 text-sm"
+          className="h-9 rounded-item border border-white/20 bg-navy-400 text-white px-2 text-sm"
           value={target}
           onChange={(e) => setTarget(e.target.value)}
           required
@@ -97,7 +97,7 @@ export function TopologyLinkEditor({
       </form>
       )}
       {links.length === 0 ? (
-        <p className="text-sm text-gray-400">尚無拓樸連線。</p>
+        <p className="text-sm text-white/40">尚無拓樸連線。</p>
       ) : (
         <ul className="space-y-1 text-sm">
           {links.map((l) => (
@@ -110,7 +110,7 @@ export function TopologyLinkEditor({
                   {nameById.get(l.source) ?? "?"} → {nameById.get(l.target) ?? "?"}
                 </span>
                 {l.bandwidth && (
-                  <span className="ml-2 text-gray-500">{l.bandwidth}</span>
+                  <span className="ml-2 text-white/60">{l.bandwidth}</span>
                 )}
               </span>
               {isEditing && (

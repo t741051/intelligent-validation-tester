@@ -10,7 +10,7 @@ export function RecentRunsTable({ runs }: { runs: OverviewSummary["recent_runs"]
       <CardContent>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-gray-500 border-b">
+            <tr className="text-left text-white/60 border-b">
               <th className="py-2">目標類型</th>
               <th className="py-2">狀態</th>
               <th className="py-2">分數</th>
@@ -23,7 +23,7 @@ export function RecentRunsTable({ runs }: { runs: OverviewSummary["recent_runs"]
                 <td className="py-2">{r.target_type}</td>
                 <td className="py-2"><StatusBadge status={r.status} /></td>
                 <td className="py-2">{formatScore(r.score)}</td>
-                <td className="py-2 text-gray-500">{formatDate(r.started_at)}</td>
+                <td className="py-2 text-white/60">{formatDate(r.started_at)}</td>
               </tr>
             ))}
           </tbody>

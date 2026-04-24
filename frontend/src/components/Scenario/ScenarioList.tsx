@@ -20,14 +20,14 @@ export function ScenarioList({ scenarios, isLoading, onDelete }: Props) {
     <Card>
       <CardContent className="p-0">
         {isLoading ? (
-          <div className="p-6 text-gray-400">載入中…</div>
+          <div className="p-6 text-white/40">載入中…</div>
         ) : scenarios.length === 0 ? (
-          <div className="p-12 text-center text-gray-400">尚未建立任何測試情境</div>
+          <div className="p-12 text-center text-white/40">尚未建立任何測試情境</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-gray-500 bg-gray-50 border-b">
+                <tr className="text-left text-white/60 bg-white/5 border-b">
                   <th className="px-4 py-3">情境名稱</th>
                   <th className="px-4 py-3">場域</th>
                   <th className="px-4 py-3">類別</th>
@@ -41,10 +41,10 @@ export function ScenarioList({ scenarios, isLoading, onDelete }: Props) {
               </thead>
               <tbody>
                 {scenarios.map((s) => (
-                  <tr key={s.id} className="border-b last:border-0 hover:bg-gray-50">
+                  <tr key={s.id} className="border-b last:border-0 hover:bg-white/5">
                     <td className="px-4 py-3">
                       <div className="font-medium">{s.name}</div>
-                      <div className="text-xs text-gray-500 font-mono">{s.id.slice(0, 8)}</div>
+                      <div className="text-xs text-white/60 font-mono">{s.id.slice(0, 8)}</div>
                     </td>
                     <td className="px-4 py-3">{s.site_name ?? "-"}</td>
                     <td className="px-4 py-3">
@@ -62,11 +62,11 @@ export function ScenarioList({ scenarios, isLoading, onDelete }: Props) {
                           )}
                         </>
                       ) : (
-                        <span className="text-gray-400">-</span>
+                        <span className="text-white/40">-</span>
                       )}
                     </td>
                     <td className="px-4 py-3">{s.ai_case || "-"}</td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">
+                    <td className="px-4 py-3 text-white/70 text-xs">
                       {formatDate(s.collected_at)}
                     </td>
                     <td className="px-4 py-3 text-right tabular-nums">

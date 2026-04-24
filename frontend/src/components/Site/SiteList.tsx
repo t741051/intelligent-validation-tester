@@ -23,7 +23,7 @@ export function SiteList({
 
   if (sites.length === 0) {
     return (
-      <div className="text-center text-gray-400 py-12 border border-dashed rounded-lg">
+      <div className="text-center text-white/40 py-12 border border-dashed rounded-item">
         尚未建立場域
       </div>
     );
@@ -38,14 +38,14 @@ export function SiteList({
             key={s.id}
             className={cn(
               "p-3 cursor-pointer transition-colors",
-              active ? "ring-2 ring-blue-500" : "hover:bg-gray-50",
+              active ? "ring-2 ring-mint-300" : "hover:bg-white/5",
             )}
             onClick={() => onSelect(s.id)}
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <div className="font-medium truncate">{s.name}</div>
-                <div className="text-xs text-gray-500 truncate">
+                <div className="text-xs text-white/60 truncate">
                   {s.address || "—"}
                 </div>
               </div>

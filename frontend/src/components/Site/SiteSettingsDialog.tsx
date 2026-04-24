@@ -61,7 +61,7 @@ export function SiteSettingsDialog({ open, onOpenChange, site }: Props) {
               onChange={(e) => setFloorPlanUrl(e.target.value)}
               placeholder="https://.../floor.png  (留空則實體地圖使用網格底)"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-white/60 mt-1">
               支援公開 HTTP(S) 圖片 URL。實體地圖會用 contain 模式顯示。
             </p>
           </div>

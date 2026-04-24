@@ -14,19 +14,19 @@ function Box({
   return (
     <div
       className={`border-2 rounded px-2 py-1.5 transition-all ${
-        active ? activeClass : "border-gray-300 bg-gray-50"
+        active ? activeClass : "border-white/20 bg-white/5"
       }`}
     >
       <div className={`text-sm font-semibold ${active ? "" : "text-gray-900"}`}>{title}</div>
-      <div className={`text-xs ${active ? "" : "text-gray-600"}`}>{subtitle}</div>
+      <div className={`text-xs ${active ? "" : "text-white/70"}`}>{subtitle}</div>
     </div>
   );
 }
 
 export function DutArchDiagram({ dutType }: { dutType: DutType }) {
   return (
-    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-      <div className="text-sm font-medium text-gray-700 mb-2">架構位置</div>
+    <div className="bg-white/5 rounded-item p-3 border border-white/15">
+      <div className="text-sm font-medium text-white/80 mb-2">架構位置</div>
       <div className="flex justify-center">
         <div className="relative" style={{ width: 220, height: 270 }}>
           <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
@@ -38,7 +38,7 @@ export function DutArchDiagram({ dutType }: { dutType: DutType }) {
               className={`border-2 rounded px-2 py-1.5 transition-all ${
                 dutType === "SMO"
                   ? "border-blue-600 bg-blue-100 text-blue-900"
-                  : "border-gray-300 bg-gray-50"
+                  : "border-white/20 bg-white/5"
               }`}
             >
               <div className="text-sm font-semibold">SMO</div>
@@ -46,7 +46,7 @@ export function DutArchDiagram({ dutType }: { dutType: DutType }) {
               <div className={`border-2 rounded px-2 py-1 mt-1 transition-all ${
                 dutType === "rApp"
                   ? "border-orange-600 bg-orange-100 text-orange-900"
-                  : "border-gray-300 bg-white"
+                  : "border-white/20 bg-white"
               }`}>
                 <div className="text-xs font-medium">rApp</div>
                 <div className="text-xs">非即時應用</div>
@@ -58,7 +58,7 @@ export function DutArchDiagram({ dutType }: { dutType: DutType }) {
               className={`border-2 rounded px-2 py-1.5 transition-all ${
                 dutType === "RIC"
                   ? "border-green-600 bg-green-100 text-green-900"
-                  : "border-gray-300 bg-gray-50"
+                  : "border-white/20 bg-white/5"
               }`}
             >
               <div className="text-sm font-semibold">RIC</div>
@@ -66,7 +66,7 @@ export function DutArchDiagram({ dutType }: { dutType: DutType }) {
               <div className={`border-2 rounded px-2 py-1 mt-1 transition-all ${
                 dutType === "xApp"
                   ? "border-purple-600 bg-purple-100 text-purple-900"
-                  : "border-gray-300 bg-white"
+                  : "border-white/20 bg-white"
               }`}>
                 <div className="text-xs font-medium">xApp</div>
                 <div className="text-xs">近即時應用</div>

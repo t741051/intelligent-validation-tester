@@ -10,7 +10,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const sidebarOpen = useUiStore((s) => s.sidebarOpen);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen">
       <Sidebar className="hidden md:flex md:flex-col" />
       {sidebarOpen && (
         <>

@@ -104,7 +104,7 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
     <>
       <div
         ref={canvasRef}
-        className="relative w-full aspect-video rounded-lg border overflow-hidden select-none"
+        className="relative w-full aspect-video rounded-section border border-white/10 overflow-hidden select-none"
         style={
           floorPlanUrl
             ? {
@@ -112,12 +112,12 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
-                backgroundColor: "#f9fafb",
+                backgroundColor: "#050E1E",
               }
             : {
-                backgroundColor: "#f9fafb",
+                backgroundColor: "#050E1E",
                 backgroundImage:
-                  "linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)",
+                  "linear-gradient(to right, rgba(128,255,232,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(128,255,232,0.08) 1px, transparent 1px)",
                 backgroundSize: "5% 5%",
               }
         }
@@ -149,12 +149,12 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
               title={`${s.code} · ${s.name}`}
             >
               <div
-                className="w-9 h-9 rounded-full bg-white border-2 flex items-center justify-center text-base shadow-sm"
+                className="w-9 h-9 rounded-full bg-navy-500 border-2 flex items-center justify-center text-base shadow-mint-glow"
                 style={{ borderColor: STATUS_COLOR[s.status] ?? "#9ca3af" }}
               >
                 📡
               </div>
-              <div className="mt-1 text-xs font-medium text-gray-700 bg-white/80 px-1 rounded">
+              <div className="mt-1 text-xs font-medium text-white/90 bg-navy-500/80 px-1 rounded">
                 {s.code}
               </div>
             </button>
@@ -187,12 +187,12 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
               title={`${c.name}${clickable ? " · 點擊播放" : ""}`}
             >
               <div
-                className="w-9 h-9 rounded-md bg-white border-2 flex items-center justify-center text-base shadow-sm"
-                style={{ borderColor: c.status === "online" ? "#22c55e" : "#9ca3af" }}
+                className="w-9 h-9 rounded-item bg-navy-500 border-2 flex items-center justify-center text-base shadow-sm"
+                style={{ borderColor: c.status === "online" ? "#80FFE8" : "#576378" }}
               >
                 📹
               </div>
-              <div className="mt-1 text-xs font-medium text-gray-700 bg-white/80 px-1 rounded">
+              <div className="mt-1 text-xs font-medium text-white/90 bg-navy-500/80 px-1 rounded">
                 {c.name || c.id.slice(0, 4)}
               </div>
             </button>
@@ -200,12 +200,12 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
         })}
 
         {gnbs.length === 0 && cameras.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-400 pointer-events-none">
+          <div className="absolute inset-0 flex items-center justify-center text-sm text-white/40 pointer-events-none">
             尚未加入 gNB 或攝影機
           </div>
         )}
         {isEditing && (
-          <div className="absolute bottom-1 right-2 text-[10px] text-gray-400 bg-white/70 px-1 rounded pointer-events-none">
+          <div className="absolute bottom-1 right-2 text-[10px] text-white/60 bg-navy-500/70 border border-white/10 px-1 rounded pointer-events-none">
             拖拉圖示調整位置
           </div>
         )}

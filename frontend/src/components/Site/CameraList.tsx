@@ -32,7 +32,7 @@ export function CameraList({ siteId }: { siteId: string }) {
   return (
     <>
       <div className="flex items-center justify-between mb-3">
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-white/60">
           {cameras.length} 個攝影機
         </div>
         {isEditing && (
@@ -42,19 +42,19 @@ export function CameraList({ siteId }: { siteId: string }) {
         )}
       </div>
       {isLoading ? (
-        <div className="text-sm text-gray-400">載入中…</div>
+        <div className="text-sm text-white/40">載入中…</div>
       ) : cameras.length === 0 ? (
-        <p className="text-sm text-gray-400">尚未新增攝影機</p>
+        <p className="text-sm text-white/40">尚未新增攝影機</p>
       ) : (
         <div className="space-y-2">
           {cameras.map((c) => (
             <div
               key={c.id}
-              className="flex items-center justify-between p-3 border rounded-lg"
+              className="flex items-center justify-between p-3 border rounded-item"
             >
               <div className="min-w-0">
                 <div className="font-medium">{c.name || c.id.slice(0, 8)}</div>
-                <div className="text-xs text-gray-500 font-mono truncate max-w-xs">
+                <div className="text-xs text-white/60 font-mono truncate max-w-xs">
                   {c.rtsp_url || c.stream_url || "(未設定串流)"}
                 </div>
                 <div className="flex items-center gap-2 mt-1">

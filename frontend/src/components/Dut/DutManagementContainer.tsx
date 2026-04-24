@@ -83,7 +83,7 @@ export function DutManagementContainer({ dutType }: { dutType: DutType }) {
           <Plus className="w-4 h-4 mr-2" /> 新增 DUT
         </Button>
       </PageHeader>
-      <p className="-mt-3 mb-4 text-sm text-gray-600">
+      <p className="-mt-3 mb-4 text-sm text-white/70">
         檢查所有 {dutType} 設備的接口介面是否正常運作
       </p>
 

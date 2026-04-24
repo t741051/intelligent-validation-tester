@@ -43,7 +43,7 @@ export function TopologyCanvas({
   const layout = computeLayout(stations);
 
   return (
-    <div className="relative w-full aspect-[2/1] bg-gray-50 border rounded-lg overflow-hidden">
+    <div className="relative w-full aspect-[2/1] bg-navy-700/40 border border-white/10 rounded-section overflow-hidden">
       <svg className="absolute inset-0 w-full h-full pointer-events-none">
         {links.map((l) => {
           const src = layout.get(l.source);
@@ -73,20 +73,20 @@ export function TopologyCanvas({
             style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
           >
             <div
-              className="w-10 h-10 rounded-full bg-white border-2 flex items-center justify-center text-lg shadow-sm"
-              style={{ borderColor: STATUS_COLOR[s.status] ?? "#9ca3af" }}
+              className="w-10 h-10 rounded-full bg-navy-500 border-2 flex items-center justify-center text-lg shadow-sm"
+              style={{ borderColor: STATUS_COLOR[s.status] ?? "#576378" }}
               title={`${s.code} · ${s.name}`}
             >
               {NODE_ICON[s.node_type] ?? "●"}
             </div>
-            <div className="mt-1 text-xs text-gray-700 bg-white/80 px-1 rounded">
+            <div className="mt-1 text-xs text-white/80 bg-navy-500/80 px-1 rounded">
               {s.code}
             </div>
           </div>
         );
       })}
       {stations.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-400">
+        <div className="absolute inset-0 flex items-center justify-center text-sm text-white/40">
           尚未加入網元
         </div>
       )}

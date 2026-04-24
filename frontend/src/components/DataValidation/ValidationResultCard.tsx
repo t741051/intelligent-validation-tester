@@ -13,7 +13,7 @@ export function ValidationResultCard({ result }: { result: DataValidationResult 
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>驗證結果</CardTitle>
-            <p className="text-sm text-gray-500">整體分數 {score}</p>
+            <p className="text-sm text-white/60">整體分數 {score}</p>
           </div>
           <Badge tone={passed ? "green" : "red"}>
             {passed ? (
@@ -56,10 +56,10 @@ function MetricRow({
   label: string; value: string; threshold: string; pass: boolean;
 }) {
   return (
-    <div className={`p-3 rounded-lg border ${pass ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}>
-      <div className="text-xs text-gray-600">{label}</div>
+    <div className={`p-3 rounded-item border ${pass ? "border-mint-300/30 bg-mint-300/10" : "border-danger/30 bg-danger/10"}`}>
+      <div className="text-xs text-white/70">{label}</div>
       <div className="mt-1 text-2xl font-semibold">{value}</div>
-      <div className="text-xs text-gray-500 mt-1">門檻 {threshold}</div>
+      <div className="text-xs text-white/60 mt-1">門檻 {threshold}</div>
     </div>
   );
 }

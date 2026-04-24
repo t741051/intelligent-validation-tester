@@ -30,27 +30,27 @@ export function RunInterfaceTestDialog({ open, onOpenChange, dut, onRun, isRunni
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-blue-900 mb-2">測試介面</h4>
-            <ul className="text-sm text-blue-800 space-y-1">
+          <div className="bg-mint-300/10 border border-mint-300/30 rounded-item p-4">
+            <h4 className="text-sm font-medium text-mint-300 mb-2">測試介面</h4>
+            <ul className="text-sm text-white/80 space-y-1">
               {(dut?.interfaces ?? []).map((iface, idx) => (
                 <li key={iface}>
                   {idx + 1}. {iface} 介面:連接測試、資料格式驗證、回應時間測量
                 </li>
               ))}
               {(dut?.interfaces ?? []).length === 0 && (
-                <li className="text-blue-900/70">此設備未設定任何介面</li>
+                <li className="text-white/50">此設備未設定任何介面</li>
               )}
             </ul>
           </div>
-          <div className="border rounded-lg p-4 space-y-3 text-sm">
+          <div className="border rounded-item p-4 space-y-3 text-sm">
             <div className="flex items-center justify-between">
               <span className="font-medium">預估測試時間</span>
-              <span className="text-gray-600">約 30 秒</span>
+              <span className="text-white/70">約 30 秒</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="font-medium">測試端點</span>
-              <span className="font-mono text-xs text-gray-600">{dut?.endpoint}</span>
+              <span className="font-mono text-xs text-white/70">{dut?.endpoint}</span>
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">

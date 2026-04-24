@@ -91,7 +91,7 @@ export function CameraFormDialog({ open, onOpenChange, isSubmitting, existing, o
               placeholder="rtsp://..."
             />
             {isEdit && (
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-white/60 mt-1">
                 修改後 MediaMTX 會自動重新註冊;清空則停止轉碼
               </p>
             )}

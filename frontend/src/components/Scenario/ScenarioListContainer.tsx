@@ -26,7 +26,7 @@ export function ScenarioListContainer() {
           <Plus className="w-4 h-4 mr-2" /> 新增情境
         </Button>
       </PageHeader>
-      <p className="-mt-3 mb-4 text-sm text-gray-600">
+      <p className="-mt-3 mb-4 text-sm text-white/70">
         管理各場域收上來的資料情境,可依場域、類別、驗證類型篩選
       </p>
       <div className="space-y-4">

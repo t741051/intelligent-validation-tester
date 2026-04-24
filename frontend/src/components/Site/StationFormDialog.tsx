@@ -121,7 +121,7 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
             <div>
               <label className="block text-sm font-medium mb-1">類型 *</label>
               <select
-                className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+                className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
                 value={form.node_type}
                 onChange={(e) =>
                   setForm({
@@ -154,11 +154,11 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
             </div>
           </div>
 
-          <fieldset className="border rounded-md p-3 space-y-3">
+          <fieldset className="border rounded-item p-3 space-y-3">
             <legend className="text-sm font-medium px-2">管理資訊</legend>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">管理 IP</label>
+                <label className="block text-xs text-white/70 mb-1">管理 IP</label>
                 <Input
                   value={form.mgmt_ip ?? ""}
                   onChange={(e) => setForm({ ...form, mgmt_ip: e.target.value })}
@@ -166,7 +166,7 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Port</label>
+                <label className="block text-xs text-white/70 mb-1">Port</label>
                 <Input
                   type="number"
                   value={form.mgmt_port ?? ""}
@@ -180,14 +180,14 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">廠商</label>
+                <label className="block text-xs text-white/70 mb-1">廠商</label>
                 <Input
                   value={form.vendor ?? ""}
                   onChange={(e) => setForm({ ...form, vendor: e.target.value })}
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">型號</label>
+                <label className="block text-xs text-white/70 mb-1">型號</label>
                 <Input
                   value={form.model ?? ""}
                   onChange={(e) => setForm({ ...form, model: e.target.value })}
@@ -197,13 +197,13 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
           </fieldset>
 
           {form.node_type === "gnb" && (
-            <fieldset className="border rounded-md p-3 space-y-3">
+            <fieldset className="border rounded-item p-3 space-y-3">
               <legend className="text-sm font-medium px-2">
                 實體地圖位置(%,0-100;之後可拖拉微調)
               </legend>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">X(橫向)</label>
+                  <label className="block text-xs text-white/70 mb-1">X(橫向)</label>
                   <Input
                     type="number" min={0} max={100} step="0.1"
                     value={form.position?.x ?? 50}
@@ -219,7 +219,7 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Y(縱向)</label>
+                  <label className="block text-xs text-white/70 mb-1">Y(縱向)</label>
                   <Input
                     type="number" min={0} max={100} step="0.1"
                     value={form.position?.y ?? 50}
@@ -239,14 +239,14 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
           )}
 
           {schema.length > 0 && (
-            <fieldset className="border rounded-md p-3 space-y-3">
+            <fieldset className="border rounded-item p-3 space-y-3">
               <legend className="text-sm font-medium px-2">
                 {form.node_type.toUpperCase()} 專屬設定
               </legend>
               <div className="grid grid-cols-2 gap-4">
                 {schema.map((f) => (
                   <div key={f.key} className={schema.length === 1 ? "col-span-2" : ""}>
-                    <label className="block text-xs text-gray-600 mb-1">{f.label}</label>
+                    <label className="block text-xs text-white/70 mb-1">{f.label}</label>
                     <Input
                       type={f.type ?? "text"}
                       value={(form.config?.[f.key] as string | number) ?? ""}
@@ -260,7 +260,7 @@ export function StationFormDialog({ open, onOpenChange, isSubmitting, onSubmit }
           )}
         </div>
         {error && (
-          <p className="mt-3 whitespace-pre-line rounded-md border border-red-300 bg-red-50 p-2 text-xs text-red-700">
+          <p className="mt-3 whitespace-pre-line rounded-item border border-danger/40 bg-danger/10 p-2 text-xs text-danger">
             新增失敗:{error}
           </p>
         )}

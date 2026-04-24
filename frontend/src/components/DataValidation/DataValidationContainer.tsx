@@ -48,7 +48,7 @@ export function DataValidationContainer({ dutType }: { dutType: DataValidationDu
           <Plus className="w-4 h-4 mr-2" /> 添加 DUT
         </Button>
       </PageHeader>
-      <p className="-mt-3 mb-4 text-sm text-gray-600">
+      <p className="-mt-3 mb-4 text-sm text-white/70">
         針對已註冊的 {dutType} 設備執行資料完整性、準確性與即時性驗證
       </p>
       <div className="space-y-4">

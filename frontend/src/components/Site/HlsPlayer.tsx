@@ -60,15 +60,15 @@ export function HlsPlayer({ src, poster }: { src: string; poster?: string }) {
         muted
         playsInline
         poster={poster}
-        className="w-full aspect-video bg-black rounded"
+        className="w-full aspect-video bg-black rounded-item"
       />
       {status === "loading" && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded text-white text-sm pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-item text-white text-sm pointer-events-none">
           連線中…(首次播放 MediaMTX 需幾秒暖機)
         </div>
       )}
       {status === "error" && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded text-red-300 text-sm">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-item text-danger text-sm">
           無法連上串流,請檢查 RTSP 來源或 MediaMTX 設定
         </div>
       )}

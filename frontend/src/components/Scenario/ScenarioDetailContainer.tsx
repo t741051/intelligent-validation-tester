@@ -38,7 +38,7 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
     return (
       <>
         <PageHeader title="情境詳情" />
-        <p className="text-gray-400">載入中…</p>
+        <p className="text-white/40">載入中…</p>
       </>
     );
   }
@@ -47,7 +47,7 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
     return (
       <>
         <PageHeader title="情境詳情" />
-        <p className="text-orange-600">找不到此情境。</p>
+        <p className="text-warning">找不到此情境。</p>
         <Link href="/test-scenarios">
           <Button variant="outline" className="mt-3">
             <ArrowLeft className="w-4 h-4 mr-2" /> 回列表
@@ -80,14 +80,14 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
                     {scenario.site_region && (
                       <Link
                         href={`/site-management/${scenario.site_region}`}
-                        className="text-blue-600 hover:underline inline-flex items-center gap-1 text-xs"
+                        className="text-mint-300 hover:underline inline-flex items-center gap-1 text-xs"
                       >
                         前往場域 <ExternalLink className="w-3 h-3" />
                       </Link>
                     )}
                   </div>
                 ) : (
-                  <span className="text-gray-400">未指定</span>
+                  <span className="text-white/40">未指定</span>
                 )}
               </Field>
               <Field label="類別">
@@ -100,7 +100,7 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
                 {scenario.dut_type ? (
                   <Badge tone="gray">{scenario.dut_type}</Badge>
                 ) : (
-                  <span className="text-gray-400">未指定</span>
+                  <span className="text-white/40">未指定</span>
                 )}
               </Field>
               <Field label="來源 DUT">
@@ -112,22 +112,22 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
                     )}
                   </>
                 ) : (
-                  <span className="text-gray-400">未指定</span>
+                  <span className="text-white/40">未指定</span>
                 )}
               </Field>
               <Field label="AI Case">
-                {scenario.ai_case || <span className="text-gray-400">-</span>}
+                {scenario.ai_case || <span className="text-white/40">-</span>}
               </Field>
               <Field label="收集時間">{formatDate(scenario.collected_at)}</Field>
               <Field label="資料筆數">
                 {scenario.row_count != null
                   ? scenario.row_count.toLocaleString()
-                  : <span className="text-gray-400">-</span>}
+                  : <span className="text-white/40">-</span>}
               </Field>
             </div>
             {scenario.description && (
               <div className="mt-4 pt-4 border-t">
-                <div className="text-sm text-gray-600 mb-1">描述</div>
+                <div className="text-sm text-white/70 mb-1">描述</div>
                 <p className="text-sm whitespace-pre-line">{scenario.description}</p>
               </div>
             )}
@@ -140,9 +140,9 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
           </CardHeader>
           <CardContent>
             {Object.keys(scenario.parameters ?? {}).length === 0 ? (
-              <p className="text-sm text-gray-400">無參數</p>
+              <p className="text-sm text-white/40">無參數</p>
             ) : (
-              <pre className="text-xs bg-gray-50 border rounded p-3 overflow-x-auto">
+              <pre className="text-xs bg-white/5 border rounded p-3 overflow-x-auto">
                 {JSON.stringify(scenario.parameters, null, 2)}
               </pre>
             )}
@@ -155,14 +155,14 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
           </CardHeader>
           <CardContent className="p-0">
             {runsLoading ? (
-              <div className="p-6 text-gray-400 text-sm">載入中…</div>
+              <div className="p-6 text-white/40 text-sm">載入中…</div>
             ) : runs.length === 0 ? (
-              <div className="p-6 text-gray-400 text-sm">尚未有驗證執行紀錄</div>
+              <div className="p-6 text-white/40 text-sm">尚未有驗證執行紀錄</div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-500 bg-gray-50 border-b">
+                    <tr className="text-left text-white/60 bg-white/5 border-b">
                       <th className="px-4 py-3">Run ID</th>
                       <th className="px-4 py-3">狀態</th>
                       <th className="px-4 py-3 text-right">分數</th>
@@ -172,7 +172,7 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
                   </thead>
                   <tbody>
                     {runs.map((r) => (
-                      <tr key={r.id} className="border-b last:border-0 hover:bg-gray-50">
+                      <tr key={r.id} className="border-b last:border-0 hover:bg-white/5">
                         <td className="px-4 py-3 font-mono text-xs">{r.id.slice(0, 8)}</td>
                         <td className="px-4 py-3">
                           <Badge tone={STATUS_TONE[r.status] ?? "gray"}>
@@ -182,10 +182,10 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
                         <td className="px-4 py-3 text-right tabular-nums">
                           {formatScore(r.score)}
                         </td>
-                        <td className="px-4 py-3 text-xs text-gray-600">
+                        <td className="px-4 py-3 text-xs text-white/70">
                           {formatDate(r.started_at)}
                         </td>
-                        <td className="px-4 py-3 text-xs text-gray-600">
+                        <td className="px-4 py-3 text-xs text-white/70">
                           {formatDate(r.ended_at)}
                         </td>
                       </tr>
@@ -204,7 +204,7 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-gray-600">{label}</div>
+      <div className="text-white/70">{label}</div>
       <div className="mt-1">{children}</div>
     </div>
   );

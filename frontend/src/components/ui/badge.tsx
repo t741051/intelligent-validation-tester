@@ -4,15 +4,15 @@ import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+  "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium border",
   {
     variants: {
       tone: {
-        green: "bg-green-100 text-green-800",
-        red: "bg-red-100 text-red-800",
-        orange: "bg-orange-100 text-orange-800",
-        blue: "bg-blue-100 text-blue-800",
-        gray: "bg-gray-100 text-gray-800",
+        green: "border-mint-300/40 bg-mint-300/15 text-mint-300",
+        red: "border-danger/40 bg-danger/15 text-danger",
+        orange: "border-warning/40 bg-warning/15 text-warning",
+        blue: "border-teal/40 bg-teal/15 text-teal",
+        gray: "border-white/15 bg-white/5 text-white/70",
       },
     },
     defaultVariants: { tone: "gray" },

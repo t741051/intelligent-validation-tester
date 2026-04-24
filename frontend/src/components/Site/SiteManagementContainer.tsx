@@ -45,7 +45,7 @@ export function SiteManagementContainer({ region }: { region: Region }) {
         <EditModeToggle />
       </PageHeader>
       {isLoading ? (
-        <div className="text-gray-400">載入中…</div>
+        <div className="text-white/40">載入中…</div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-4">
           <div className="space-y-3">
@@ -60,7 +60,7 @@ export function SiteManagementContainer({ region }: { region: Region }) {
             {selected ? (
               <SiteDetail site={selected} />
             ) : (
-              <div className="text-center text-gray-400 py-12 border border-dashed rounded-lg">
+              <div className="text-center text-white/40 py-12 border border-dashed rounded-item">
                 左側選擇場域以檢視詳情
               </div>
             )}

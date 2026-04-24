@@ -20,7 +20,7 @@ export default function LoginPage() {
   });
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <main className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>登入 智慧驗證 tester</CardTitle>
@@ -28,22 +28,22 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit((v) => login(v))} className="space-y-4">
             <div>
-              <label className="text-sm text-gray-600">帳號 / Email</label>
+              <label className="text-sm text-white/70">帳號 / Email</label>
               <Input type="text" autoComplete="username" {...register("identifier")} />
               {errors.identifier && (
-                <p className="text-xs text-red-500 mt-1">{errors.identifier.message}</p>
+                <p className="text-xs text-danger mt-1">{errors.identifier.message}</p>
               )}
             </div>
             <div>
-              <label className="text-sm text-gray-600">密碼</label>
+              <label className="text-sm text-white/70">密碼</label>
               <Input type="password" autoComplete="current-password" {...register("password")} />
-              {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>}
+              {errors.password && <p className="text-xs text-danger mt-1">{errors.password.message}</p>}
             </div>
-            {error && <p className="text-xs text-red-500">登入失敗:帳號或密碼錯誤</p>}
+            {error && <p className="text-xs text-danger">登入失敗:帳號或密碼錯誤</p>}
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "登入中…" : "登入"}
             </Button>
-            <p className="text-xs text-gray-400 text-center">
+            <p className="text-xs text-white/40 text-center">
               預設: admin(或 admin@ivt.local) / admin
             </p>
           </form>

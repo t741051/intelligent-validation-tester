@@ -20,7 +20,7 @@ export function ScenarioFilters({ value, onChange }: Props) {
     onChange({ ...value, ...patch });
 
   return (
-    <div className="grid grid-cols-4 gap-3 p-4 bg-gray-50 rounded-lg border">
+    <div className="grid grid-cols-4 gap-3 p-4 bg-white/5 rounded-item border">
       <Select
         label="場域"
         value={value.site ?? ""}
@@ -78,9 +78,9 @@ function Select({
 }) {
   return (
     <div>
-      <label className="block text-xs text-gray-600 mb-1">{label}</label>
+      <label className="block text-xs text-white/70 mb-1">{label}</label>
       <select
-        className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+        className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >

@@ -30,13 +30,13 @@ export function CollapsibleCard({
             className="flex items-center gap-2 flex-1 min-w-0 text-left"
           >
             {open ? (
-              <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
+              <ChevronDown className="w-4 h-4 text-white/40 shrink-0" />
             ) : (
-              <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
+              <ChevronRight className="w-4 h-4 text-white/40 shrink-0" />
             )}
             <div className="font-semibold leading-none">{title}</div>
             {subtitle && (
-              <span className="text-xs text-gray-500 truncate">{subtitle}</span>
+              <span className="text-xs text-white/60 truncate">{subtitle}</span>
             )}
           </button>
           {extra && <div className="shrink-0">{extra}</div>}

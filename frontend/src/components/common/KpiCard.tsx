@@ -9,19 +9,19 @@ type Props = {
 };
 
 const tones = {
-  blue: "border-l-4 border-blue-600",
-  green: "border-l-4 border-green-600",
-  orange: "border-l-4 border-orange-600",
-  purple: "border-l-4 border-purple-600",
+  blue: "border-l-4 border-teal",
+  green: "border-l-4 border-mint-300",
+  orange: "border-l-4 border-warning",
+  purple: "border-l-4 border-mint-500",
 };
 
 export function KpiCard({ label, value, hint, tone = "blue" }: Props) {
   return (
     <Card className={cn(tones[tone])}>
       <CardContent className="p-4 md:p-6">
-        <p className="text-xs md:text-sm text-gray-500">{label}</p>
+        <p className="text-xs md:text-sm text-white/60">{label}</p>
         <p className="text-2xl md:text-3xl font-semibold mt-1">{value}</p>
-        {hint && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
+        {hint && <p className="text-xs text-white/40 mt-1">{hint}</p>}
       </CardContent>
     </Card>
   );

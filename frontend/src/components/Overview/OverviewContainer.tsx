@@ -9,7 +9,7 @@ export function OverviewContainer() {
   const { data, isLoading } = useOverviewSummary();
 
   if (isLoading || !data) {
-    return <div className="text-gray-400">載入中…</div>;
+    return <div className="text-white/40">載入中…</div>;
   }
 
   return (

@@ -39,7 +39,7 @@ export function BaselineFields({ value, onChange, showThresholds = true }: Props
       <div>
         <label className="block text-sm font-medium mb-1">測試類別</label>
         <select
-          className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 py-1 text-sm"
+          className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 py-1 text-sm"
           value={value.test_category}
           onChange={(e) =>
             onChange({ ...value, test_category: e.target.value as TestCategory | "" })
@@ -61,10 +61,10 @@ export function BaselineFields({ value, onChange, showThresholds = true }: Props
                 key={c}
                 type="button"
                 onClick={() => toggleAiCase(c)}
-                className={`px-3 py-1 text-xs rounded-full border ${
+                className={`px-3 py-1 text-xs rounded-full border transition-colors ${
                   active
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                    ? "bg-mint-300 text-navy border-mint-300"
+                    : "bg-white/5 text-white/80 border-white/20 hover:bg-white/10"
                 }`}
               >
                 {c}
@@ -76,16 +76,16 @@ export function BaselineFields({ value, onChange, showThresholds = true }: Props
       <div>
         <label className="block text-sm font-medium mb-2">測試情境</label>
         {scenariosLoading ? (
-          <div className="text-sm text-gray-400">載入中…</div>
+          <div className="text-sm text-white/40">載入中…</div>
         ) : scenarios.length === 0 ? (
-          <p className="text-sm text-gray-400">尚無可用的資料驗證情境</p>
+          <p className="text-sm text-white/40">尚無可用的資料驗證情境</p>
         ) : (
-          <div className="space-y-1 max-h-40 overflow-y-auto border rounded-md p-2">
+          <div className="space-y-1 max-h-40 overflow-y-auto border rounded-item p-2">
             {scenarios.map((s) => (
               <label key={s.id} className="flex items-center gap-2 text-sm py-1">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 rounded border-gray-300"
+                  className="w-4 h-4 rounded border-white/20"
                   checked={value.test_scenarios.includes(s.id)}
                   onChange={() => toggleScenario(s.id)}
                 />

@@ -111,7 +111,7 @@ export function DutFormDialog({
             <label className="text-sm font-medium" htmlFor="dut-site">部署場域</label>
             <select
               id="dut-site"
-              className="h-9 w-full rounded-md border border-gray-300 bg-white px-2 text-sm"
+              className="h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-2 text-sm"
               value={siteId}
               onChange={(e) => setSiteId(e.target.value)}
               required
@@ -123,7 +123,7 @@ export function DutFormDialog({
                 </option>
               ))}
             </select>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-white/60">
               DUT 部署在哪個場域。環境類別由場域決定,若無合適場域請先到「場域管理」建立。
             </p>
           </div>
@@ -136,18 +136,18 @@ export function DutFormDialog({
               onChange={(e) => setEndpoint(e.target.value)}
               required
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-white/60">
               可填 IP、主機名或完整 URL。建立時不會測試連線,按「執行介面測試」才會實際連線。
             </p>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">測試介面</label>
-            <div className="border rounded-lg p-3 bg-gray-50 grid grid-cols-2 gap-3">
+            <div className="border rounded-item p-3 bg-white/5 grid grid-cols-2 gap-3">
               {AVAILABLE_INTERFACES[dutType].map((iface) => (
                 <label key={iface} className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 rounded border-gray-300"
+                    className="w-4 h-4 rounded border-white/20"
                     checked={interfaces.includes(iface)}
                     onChange={() => toggleInterface(iface)}
                   />
@@ -165,12 +165,12 @@ export function DutFormDialog({
             </Button>
           </div>
           {sites.length === 0 && (
-            <p className="text-xs text-orange-600">
+            <p className="text-xs text-warning">
               系統尚未偵測到任何場域,請先於「場域管理」建立場域。
             </p>
           )}
           {submitError && (
-            <p className="whitespace-pre-line rounded-md border border-red-300 bg-red-50 p-2 text-xs text-red-700">
+            <p className="whitespace-pre-line rounded-item border border-danger/40 bg-danger/10 p-2 text-xs text-danger">
               {submitError}
             </p>
           )}

@@ -4,7 +4,14 @@ import { cn } from "@/lib/cn";
 
 export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("rounded-xl border bg-white shadow-sm", className)} {...props} />
+    <div
+      ref={ref}
+      className={cn(
+        "rounded-section border border-white/10 bg-navy-500/60 backdrop-blur-sm shadow-lg shadow-black/30 text-white",
+        className,
+      )}
+      {...props}
+    />
   ),
 );
 Card.displayName = "Card";
@@ -18,7 +25,7 @@ CardHeader.displayName = "CardHeader";
 
 export const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn("text-lg font-semibold", className)} {...props} />
+    <h3 ref={ref} className={cn("text-lg font-semibold text-white", className)} {...props} />
   ),
 );
 CardTitle.displayName = "CardTitle";

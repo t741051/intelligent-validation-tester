@@ -55,7 +55,7 @@ export function SiteCreateForm({ region }: { region: Region }) {
         onChange={(e) => setAddress(e.target.value)}
       />
       <select
-        className="h-9 rounded-md border border-gray-300 bg-white px-2 text-sm"
+        className="h-9 rounded-item border border-white/20 bg-navy-400 text-white px-2 text-sm"
         value={environment}
         onChange={(e) => setEnvironment(e.target.value as Environment)}
       >

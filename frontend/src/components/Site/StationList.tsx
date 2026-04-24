@@ -40,7 +40,7 @@ export function StationList({
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <div className="text-sm text-gray-500">{stations.length} 個網元</div>
+        <div className="text-sm text-white/60">{stations.length} 個網元</div>
         {isEditing && (
           <Button size="sm" onClick={() => setFormOpen(true)}>
             <Plus className="w-4 h-4 mr-2" /> 新增網元
@@ -48,12 +48,12 @@ export function StationList({
         )}
       </div>
       {stations.length === 0 ? (
-        <p className="text-sm text-gray-400">此場域尚無網元。</p>
+        <p className="text-sm text-white/40">此場域尚無網元。</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-gray-500 border-b">
+              <tr className="text-left text-white/60 border-b">
                 <th className="py-2 pr-2">Code</th>
                 <th className="py-2 pr-2">名稱</th>
                 <th className="py-2 pr-2">類型</th>
@@ -69,18 +69,18 @@ export function StationList({
                   <td className="py-2 pr-2 font-mono text-xs">{s.code}</td>
                   <td className="py-2 pr-2">{s.name}</td>
                   <td className="py-2 pr-2 uppercase">{s.node_type}</td>
-                  <td className="py-2 pr-2 font-mono text-xs text-gray-600">
+                  <td className="py-2 pr-2 font-mono text-xs text-white/70">
                     {s.mgmt_ip ? (
                       <>
                         {s.mgmt_ip}
                         {s.mgmt_port ? `:${s.mgmt_port}` : ""}
                       </>
                     ) : (
-                      <span className="text-gray-400">-</span>
+                      <span className="text-white/40">-</span>
                     )}
                   </td>
-                  <td className="py-2 pr-2 text-gray-600">
-                    {s.vendor || <span className="text-gray-400">-</span>}
+                  <td className="py-2 pr-2 text-white/70">
+                    {s.vendor || <span className="text-white/40">-</span>}
                   </td>
                   <td className="py-2 pr-2">
                     <Badge tone={STATUS_TONE[s.status] ?? "gray"}>

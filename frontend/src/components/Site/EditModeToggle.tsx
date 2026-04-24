@@ -8,14 +8,14 @@ export function EditModeToggle() {
   const setEditing = useEditModeStore((s) => s.setEditing);
 
   return (
-    <div className="inline-flex items-center rounded-full border border-gray-200 bg-gray-100 p-0.5 text-sm">
+    <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 p-0.5 text-sm">
       <button
         type="button"
         onClick={() => setEditing(false)}
         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 transition-colors ${
           !isEditing
-            ? "bg-white text-gray-900 shadow-sm"
-            : "text-gray-500 hover:text-gray-700"
+            ? "bg-white/10 text-white shadow-sm"
+            : "text-white/60 hover:text-white/80"
         }`}
       >
         <Eye className="h-3.5 w-3.5" />
@@ -26,8 +26,8 @@ export function EditModeToggle() {
         onClick={() => setEditing(true)}
         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 transition-colors ${
           isEditing
-            ? "bg-blue-600 text-white shadow-sm"
-            : "text-gray-500 hover:text-gray-700"
+            ? "bg-mint-300 text-navy shadow-mint-glow"
+            : "text-white/60 hover:text-white/80"
         }`}
       >
         <Pencil className="h-3.5 w-3.5" />

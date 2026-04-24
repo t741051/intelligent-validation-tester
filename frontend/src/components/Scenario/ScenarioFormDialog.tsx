@@ -76,7 +76,7 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
             <div>
               <label className="block text-sm font-medium mb-1">場域 *</label>
               <select
-                className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+                className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
                 value={form.site}
                 onChange={(e) => setForm({ ...form, site: e.target.value })}
               >
@@ -91,7 +91,7 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
             <div>
               <label className="block text-sm font-medium mb-1">類別 *</label>
               <select
-                className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+                className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
                 value={form.category}
                 onChange={(e) =>
                   setForm({ ...form, category: e.target.value as ScenarioCategory })
@@ -108,7 +108,7 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
             <div>
               <label className="block text-sm font-medium mb-1">驗證類型 *</label>
               <select
-                className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+                className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
                 value={form.validation_type}
                 onChange={(e) =>
                   setForm({ ...form, validation_type: e.target.value as ValidationType })
@@ -122,7 +122,7 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
             <div>
               <label className="block text-sm font-medium mb-1">DUT 類型</label>
               <select
-                className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+                className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
                 value={form.dut_type}
                 onChange={(e) => setForm({ ...form, dut_type: e.target.value, source_dut: null })}
               >
@@ -139,7 +139,7 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
             <div>
               <label className="block text-sm font-medium mb-1">來源 DUT</label>
               <select
-                className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+                className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
                 value={form.source_dut ?? ""}
                 onChange={(e) => setForm({ ...form, source_dut: e.target.value || null })}
                 disabled={!form.dut_type}

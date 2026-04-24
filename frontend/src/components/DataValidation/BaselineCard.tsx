@@ -25,7 +25,7 @@ export function BaselineCard({ dut, baseline, isLoading, onEdit }: Props) {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>{dut.name}</CardTitle>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-white/60">
               {dut.type} · <span className="font-mono text-xs">{dut.endpoint}</span>
             </p>
           </div>
@@ -37,9 +37,9 @@ export function BaselineCard({ dut, baseline, isLoading, onEdit }: Props) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="text-gray-400 text-sm">載入中…</div>
+          <div className="text-white/40 text-sm">載入中…</div>
         ) : !baseline ? (
-          <div className="text-sm text-orange-600">
+          <div className="text-sm text-warning">
             尚未設定 Baseline,無法執行資料品質驗證。
           </div>
         ) : (
@@ -59,16 +59,16 @@ export function BaselineCard({ dut, baseline, isLoading, onEdit }: Props) {
                 {baseline.test_category ? (
                   <Badge tone="blue">{TEST_CATEGORY_LABEL[baseline.test_category]}</Badge>
                 ) : (
-                  <span className="text-gray-400">未指定</span>
+                  <span className="text-white/40">未指定</span>
                 )}
               </Field>
             </section>
 
             <section>
-              <div className="text-gray-600 text-sm mb-2">支援的 AI Cases</div>
+              <div className="text-white/70 text-sm mb-2">支援的 AI Cases</div>
               <div className="flex flex-wrap gap-1">
                 {baseline.supported_ai_cases.length === 0 ? (
-                  <span className="text-gray-400 text-sm">未指定</span>
+                  <span className="text-white/40 text-sm">未指定</span>
                 ) : (
                   baseline.supported_ai_cases.map((c) => (
                     <Badge key={c} tone="gray">{c}</Badge>
@@ -78,9 +78,9 @@ export function BaselineCard({ dut, baseline, isLoading, onEdit }: Props) {
             </section>
 
             <section>
-              <div className="text-gray-600 text-sm mb-2">測試情境</div>
+              <div className="text-white/70 text-sm mb-2">測試情境</div>
               {baseline.test_scenarios_detail.length === 0 ? (
-                <span className="text-gray-400 text-sm">尚未選擇</span>
+                <span className="text-white/40 text-sm">尚未選擇</span>
               ) : (
                 <ul className="space-y-1">
                   {baseline.test_scenarios_detail.map((s) => (
@@ -95,7 +95,7 @@ export function BaselineCard({ dut, baseline, isLoading, onEdit }: Props) {
             </section>
 
             <section>
-              <div className="text-gray-600 text-sm mb-2">Baseline 門檻</div>
+              <div className="text-white/70 text-sm mb-2">Baseline 門檻</div>
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <Metric label="完整性" value={`${baseline.min_completeness}%`} />
                 <Metric label="準確性" value={`${baseline.min_accuracy}%`} />
@@ -105,11 +105,11 @@ export function BaselineCard({ dut, baseline, isLoading, onEdit }: Props) {
 
             {baseline.notes && (
               <section>
-                <div className="text-gray-600 text-sm mb-1">備註</div>
-                <div className="text-sm text-gray-700">{baseline.notes}</div>
+                <div className="text-white/70 text-sm mb-1">備註</div>
+                <div className="text-sm text-white/80">{baseline.notes}</div>
               </section>
             )}
-            <div className="text-xs text-gray-400">
+            <div className="text-xs text-white/40">
               最後更新:{formatDate(baseline.updated_at)}
             </div>
           </div>
@@ -122,7 +122,7 @@ export function BaselineCard({ dut, baseline, isLoading, onEdit }: Props) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-gray-600">{label}</div>
+      <div className="text-white/70">{label}</div>
       <div className="mt-1">{children}</div>
     </div>
   );
@@ -131,7 +131,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-gray-600">{label}</div>
+      <div className="text-white/70">{label}</div>
       <div className="mt-1 text-xl font-semibold">{value}</div>
     </div>
   );

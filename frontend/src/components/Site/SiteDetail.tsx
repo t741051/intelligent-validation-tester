@@ -37,7 +37,7 @@ export function SiteDetail({ site }: { site: Site }) {
               {ENV_LABEL[site.environment] ?? site.environment}
             </Badge>
             {site.address && (
-              <span className="text-sm text-gray-500 truncate">{site.address}</span>
+              <span className="text-sm text-white/60 truncate">{site.address}</span>
             )}
             <Badge tone={site.floor_plan_url ? "green" : "gray"}>
               {site.floor_plan_url ? "已設平面圖" : "網格底"}
@@ -60,7 +60,7 @@ export function SiteDetail({ site }: { site: Site }) {
         <CardHeader className="pb-2">
           <div className="flex items-baseline justify-between">
             <CardTitle>實體地圖</CardTitle>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-white/60">
               gNB {gnbStations.length} · 點攝影機圖示播放
             </p>
           </div>
@@ -80,7 +80,7 @@ export function SiteDetail({ site }: { site: Site }) {
           subtitle="SMO → RIC → gNB"
         >
           {isLoading ? (
-            <div className="text-gray-400 text-sm">載入中…</div>
+            <div className="text-white/40 text-sm">載入中…</div>
           ) : (
             <TopologyCanvas stations={stations} links={links} />
           )}

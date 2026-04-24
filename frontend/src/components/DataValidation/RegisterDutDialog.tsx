@@ -40,14 +40,14 @@ export function RegisterDutDialog({ open, onOpenChange, dutType, isSubmitting, o
           <div>
             <label className="block text-sm font-medium mb-1">選擇 DUT</label>
             {isLoading ? (
-              <div className="text-sm text-gray-400">載入中…</div>
+              <div className="text-sm text-white/40">載入中…</div>
             ) : duts.length === 0 ? (
-              <p className="text-sm text-orange-600">
+              <p className="text-sm text-warning">
                 沒有可用的 {dutType} DUT(全部已註冊或尚未於「連接介面驗證」建立)。
               </p>
             ) : (
               <select
-                className="flex h-9 w-full rounded-md border border-gray-300 bg-white px-3 py-1 text-sm"
+                className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 py-1 text-sm"
                 value={dutId}
                 onChange={(e) => setDutId(e.target.value)}
               >

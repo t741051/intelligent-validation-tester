@@ -1,28 +1,38 @@
 "use client";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Cable,
+  Database,
+  Globe,
+  LayoutDashboard,
+  Sparkles,
+  Target,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/cn";
 import { useUiStore } from "@/stores/uiStore";
 
-type NavLeaf = { kind: "leaf"; id: string; href: string; label: string };
+type NavLeaf = { kind: "leaf"; id: string; href: string; label: string; icon?: LucideIcon };
 type NavBranch = {
   kind: "branch";
   id: string;
   label: string;
-  icon?: string;
+  icon?: LucideIcon;
   children: NavNode[];
 };
 type NavNode = NavLeaf | NavBranch;
 
 const NAV: NavNode[] = [
-  { kind: "leaf", id: "overview", href: "/overview", label: "📊 總覽" },
+  { kind: "leaf", id: "overview", href: "/overview", label: "總覽", icon: LayoutDashboard },
   {
     kind: "branch",
     id: "interface-validation",
     label: "連接介面驗證",
-    icon: "🔌",
+    icon: Cable,
     children: [
       {
         kind: "branch",
@@ -41,7 +51,7 @@ const NAV: NavNode[] = [
     kind: "branch",
     id: "data-validation",
     label: "資料品質驗證",
-    icon: "📁",
+    icon: Database,
     children: [
       {
         kind: "branch",
@@ -58,7 +68,7 @@ const NAV: NavNode[] = [
     kind: "branch",
     id: "intelligence-validation",
     label: "智慧程度驗證",
-    icon: "🧠",
+    icon: Sparkles,
     children: [
       {
         kind: "branch",
@@ -71,12 +81,12 @@ const NAV: NavNode[] = [
       },
     ],
   },
-  { kind: "leaf", id: "test-scenarios", href: "/test-scenarios", label: "🎯 端對端測試情境" },
+  { kind: "leaf", id: "test-scenarios", href: "/test-scenarios", label: "端對端測試情境", icon: Target },
   {
     kind: "branch",
     id: "site-management",
     label: "場域管理",
-    icon: "🌍",
+    icon: Globe,
     children: [
       { kind: "leaf", id: "site-domestic", href: "/site-management/domestic", label: "國內場域" },
       { kind: "leaf", id: "site-international", href: "/site-management/international", label: "國外場域" },
@@ -106,42 +116,50 @@ function NavTree({
 }) {
   const indent = depth === 0 ? "" : depth === 1 ? "ml-4" : "ml-6";
   return (
-    <div className={cn("space-y-0.5", depth > 0 && "border-l border-gray-100 pl-2 mt-0.5", indent)}>
+    <div className={cn("space-y-0.5", depth > 0 && "border-l border-white/10 pl-2 mt-0.5", indent)}>
       {nodes.map((node) => {
         if (node.kind === "leaf") {
           const active = pathname === node.href || pathname.startsWith(node.href + "/");
+          const LeafIcon = node.icon;
           return (
             <Link
               key={node.id}
               href={node.href}
               className={cn(
-                "block px-3 py-1.5 rounded-md text-sm transition-colors",
+                "relative flex items-center gap-2 px-3 py-1.5 rounded-item text-sm transition-colors",
                 active
-                  ? "bg-blue-50 text-blue-700 font-medium"
-                  : "text-gray-600 hover:bg-gray-50",
+                  ? "bg-mint-300/10 text-mint-300 font-medium"
+                  : "text-white/70 hover:bg-white/5 hover:text-white",
               )}
             >
-              {node.label}
+              {active && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 bg-mint-300 rounded-r" />
+              )}
+              {LeafIcon && <LeafIcon className="w-4 h-4" strokeWidth={1.5} />}
+              <span>{node.label}</span>
             </Link>
           );
         }
         const branchActive = hasActiveDescendant(node, pathname);
         const expanded = expandedNavIds.includes(node.id) || branchActive;
+        const BranchIcon = node.icon;
         return (
           <div key={node.id}>
             <button
               type="button"
               onClick={() => toggle(node.id)}
               className={cn(
-                "w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors",
-                branchActive ? "text-blue-700 font-medium" : "text-gray-700 hover:bg-gray-50",
+                "w-full flex items-center gap-2 px-3 py-2 rounded-item text-sm transition-colors",
+                branchActive
+                  ? "text-mint-300 font-medium"
+                  : "text-white/80 hover:bg-white/5 hover:text-white",
               )}
             >
-              {node.icon && <span>{node.icon}</span>}
+              {BranchIcon && <BranchIcon className="w-4 h-4" strokeWidth={1.5} />}
               <span className="flex-1 text-left">{node.label}</span>
               {expanded
-                ? <ChevronDown className="w-4 h-4 text-gray-400" />
-                : <ChevronRight className="w-4 h-4 text-gray-400" />}
+                ? <ChevronDown className="w-4 h-4 text-white/40" />
+                : <ChevronRight className="w-4 h-4 text-white/40" />}
             </button>
             {expanded && (
               <NavTree
@@ -165,10 +183,10 @@ export function Sidebar({ className }: { className?: string }) {
   const toggleNavItem = useUiStore((s) => s.toggleNavItem);
 
   return (
-    <aside className={cn("border-r bg-white w-64 flex-shrink-0 overflow-y-auto", className)}>
-      <div className="p-4 border-b">
-        <p className="text-lg font-semibold">智慧驗證 tester</p>
-        <p className="text-xs text-gray-400 mt-1">v1.0.0</p>
+    <aside className={cn("border-r border-white/10 bg-navy-600/70 backdrop-blur-sm w-64 flex-shrink-0 overflow-y-auto", className)}>
+      <div className="p-4 border-b border-white/10">
+        <p className="text-lg font-semibold text-white">智慧驗證 tester</p>
+        <p className="text-xs text-white/40 mt-1">v1.0.0</p>
       </div>
       <nav className="p-2">
         <NavTree

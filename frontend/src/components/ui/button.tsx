@@ -6,14 +6,18 @@ import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-item text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-300 focus-visible:ring-offset-2 focus-visible:ring-offset-navy",
   {
     variants: {
       variant: {
-        default: "bg-blue-600 text-white hover:bg-blue-700",
-        destructive: "bg-red-600 text-white hover:bg-red-700",
-        outline: "border border-gray-300 bg-white hover:bg-gray-50",
-        ghost: "hover:bg-gray-100",
+        default:
+          "bg-mint-300 text-navy hover:bg-mint-200 active:bg-mint-400",
+        destructive:
+          "bg-danger text-navy hover:brightness-110 active:brightness-95",
+        outline:
+          "border border-white/15 bg-white/5 text-white hover:bg-white/10 hover:border-mint-300/60",
+        ghost:
+          "text-white/80 hover:bg-white/10 hover:text-white",
       },
       size: {
         default: "h-9 px-4 py-2",
