@@ -40,3 +40,6 @@ redis_data/
 minio_data/
 .venv-mig/
 backend/.venv-mig/
+
+# Design reference (too large for git)
+*.pdf
