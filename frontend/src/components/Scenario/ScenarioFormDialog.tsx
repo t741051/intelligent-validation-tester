@@ -9,6 +9,7 @@ import { useSites } from "@/hooks/Site/useSites";
 import type { DutType } from "@/types/common";
 import type {
   ScenarioCategory,
+  TestScenario,
   TestScenarioInput,
   ValidationType,
 } from "@/types/scenario";
@@ -32,10 +33,21 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isSubmitting: boolean;
+  existing?: TestScenario | null;
   onSubmit: (input: TestScenarioInput) => Promise<void>;
 };
 
-export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit }: Props) {
+function toLocalInput(iso: string | null): string | null {
+  // datetime-local wants YYYY-MM-DDTHH:MM (no timezone)
+  if (!iso) return null;
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export function ScenarioFormDialog({
+  open, onOpenChange, isSubmitting, existing, onSubmit,
+}: Props) {
   const [form, setForm] = useState<TestScenarioInput>(DEFAULT_FORM);
   const { data: sitesData } = useSites();
   const sites = sitesData?.items ?? [];
@@ -44,8 +56,25 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
   );
 
   useEffect(() => {
-    if (open) setForm(DEFAULT_FORM);
-  }, [open]);
+    if (!open) return;
+    if (existing) {
+      setForm({
+        name: existing.name,
+        site: existing.site ?? "",
+        source_dut: existing.source_dut ?? null,
+        validation_type: existing.validation_type,
+        dut_type: existing.dut_type,
+        ai_case: existing.ai_case,
+        category: existing.category,
+        collected_at: toLocalInput(existing.collected_at),
+        row_count: existing.row_count,
+        description: existing.description,
+        parameters: existing.parameters,
+      });
+    } else {
+      setForm(DEFAULT_FORM);
+    }
+  }, [open, existing]);
 
   const handleSubmit = () => {
     if (!form.name || !form.site) return;
@@ -56,11 +85,13 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
     });
   };
 
+  const isEdit = !!existing;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>新增測試情境</DialogTitle>
+          <DialogTitle>{isEdit ? "編輯測試情境" : "新增測試情境"}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div>
@@ -197,7 +228,7 @@ export function ScenarioFormDialog({ open, onOpenChange, isSubmitting, onSubmit 
             取消
           </Button>
           <Button onClick={handleSubmit} disabled={isSubmitting || !form.name || !form.site}>
-            {isSubmitting ? "建立中…" : "新增"}
+            {isSubmitting ? (isEdit ? "儲存中…" : "建立中…") : (isEdit ? "儲存" : "新增")}
           </Button>
         </div>
       </DialogContent>

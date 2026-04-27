@@ -1,14 +1,18 @@
 "use client";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Pencil } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { PageHeader } from "@/components/common/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScenarioDetail } from "@/hooks/Scenario/useScenarioDetail";
+import { useScenarioForm } from "@/hooks/Scenario/useScenarioForm";
 import { useScenarioRuns } from "@/hooks/ValidationRun/useScenarioRuns";
 import { formatDate, formatScore } from "@/lib/formatters";
+
+import { ScenarioFormDialog } from "./ScenarioFormDialog";
 import {
   SCENARIO_CATEGORY_LABEL,
   VALIDATION_TYPE_LABEL,
@@ -33,6 +37,8 @@ const STATUS_LABEL: Record<string, string> = {
 export function ScenarioDetailContainer({ id }: { id: string }) {
   const { scenario, isLoading } = useScenarioDetail(id);
   const { runs, isLoading: runsLoading } = useScenarioRuns(scenario?.id ?? null);
+  const { update, isUpdating } = useScenarioForm();
+  const [editOpen, setEditOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -60,12 +66,25 @@ export function ScenarioDetailContainer({ id }: { id: string }) {
   return (
     <>
       <PageHeader title={scenario.name}>
+        <Button variant="outline" onClick={() => setEditOpen(true)}>
+          <Pencil className="w-4 h-4 mr-2" /> 編輯
+        </Button>
         <Link href="/test-scenarios">
           <Button variant="outline">
             <ArrowLeft className="w-4 h-4 mr-2" /> 回列表
           </Button>
         </Link>
       </PageHeader>
+      <ScenarioFormDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        existing={scenario}
+        isSubmitting={isUpdating}
+        onSubmit={async (input) => {
+          await update({ id: scenario.id, input });
+          setEditOpen(false);
+        }}
+      />
       <div className="space-y-4">
         <Card>
           <CardHeader>

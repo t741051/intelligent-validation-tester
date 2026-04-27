@@ -10,6 +10,10 @@ export function useScenarioForm() {
     mutationFn: (input) => scenarioService.create(input),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["scenario"] }),
   });
+  const update = useMutation<TestScenario, Error, { id: string; input: Partial<TestScenarioInput> }>({
+    mutationFn: ({ id, input }) => scenarioService.update(id, input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["scenario"] }),
+  });
   const remove = useMutation<void, Error, string>({
     mutationFn: (id) => scenarioService.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["scenario"] }),
@@ -17,6 +21,8 @@ export function useScenarioForm() {
   return {
     create: create.mutateAsync,
     isCreating: create.isPending,
+    update: update.mutateAsync,
+    isUpdating: update.isPending,
     remove: remove.mutateAsync,
     isRemoving: remove.isPending,
   };

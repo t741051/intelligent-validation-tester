@@ -31,10 +31,12 @@ export const mockDataQualityService = {
     baselineStore.set(dutId, baseline);
     return baseline;
   },
-  async runValidation(dutId: string): Promise<DataValidationResult> {
+  async runValidation(dutId: string, scenarioId: string): Promise<DataValidationResult> {
     await new Promise((r) => setTimeout(r, 800));
     const baseline = baselineStore.get(dutId);
     if (!baseline) throw new Error("Baseline not configured for this DUT.");
+    const scenario = baseline.test_scenarios_detail.find((s) => s.id === scenarioId);
+    if (!scenario) throw new Error("該情境不在此 baseline 的關聯情境清單中");
     const completeness = Math.round((80 + Math.random() * 19) * 100) / 100;
     const accuracy = Math.round((80 + Math.random() * 19) * 100) / 100;
     const timelinessLag = Math.round((10 + Math.random() * 110) * 10) / 10;
@@ -47,6 +49,12 @@ export const mockDataQualityService = {
       timelinessOk;
     return {
       dut_id: dutId,
+      scenario: {
+        id: scenario.id,
+        name: scenario.name,
+        category: scenario.category,
+        ai_case: scenario.ai_case,
+      },
       passed,
       score: overall,
       metrics: {

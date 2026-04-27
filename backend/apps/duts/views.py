@@ -108,6 +108,15 @@ class DutViewSet(viewsets.ModelViewSet):
         except DataQualityBaseline.DoesNotExist:
             raise ValidationError({"baseline": "Baseline not configured for this DUT."})
 
+        scenario_id = request.data.get("scenario_id")
+        if not scenario_id:
+            raise ValidationError({"scenario_id": "請選擇一個測試情境"})
+        if not baseline.test_scenarios.filter(id=scenario_id).exists():
+            raise ValidationError(
+                {"scenario_id": "該情境不在此 baseline 的關聯情境清單中"}
+            )
+        scenario = baseline.test_scenarios.get(id=scenario_id)
+
         completeness = round(random.uniform(80, 99), 2)
         accuracy = round(random.uniform(80, 99), 2)
         timeliness_lag = round(random.uniform(10, 120), 1)
@@ -121,6 +130,12 @@ class DutViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 "dut_id": str(dut.id),
+                "scenario": {
+                    "id": str(scenario.id),
+                    "name": scenario.name,
+                    "category": scenario.category,
+                    "ai_case": scenario.ai_case,
+                },
                 "passed": passed,
                 "score": overall,
                 "metrics": {

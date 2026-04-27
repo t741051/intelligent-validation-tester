@@ -20,8 +20,13 @@ export const dataQualityService = {
     const { data } = await apiClient.put(`/dut/${dutId}/baseline/`, input);
     return data;
   },
-  async runValidation(dutId: string): Promise<DataValidationResult> {
-    const { data } = await apiClient.post(`/dut/${dutId}/run-data-validation/`);
+  async runValidation(
+    dutId: string,
+    scenarioId: string,
+  ): Promise<DataValidationResult> {
+    const { data } = await apiClient.post(`/dut/${dutId}/run-data-validation/`, {
+      scenario_id: scenarioId,
+    });
     return data;
   },
 };

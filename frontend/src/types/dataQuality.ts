@@ -50,6 +50,12 @@ export const AI_CASE_OPTIONS = ["CCO", "ES", "Load Balance", "QoE"] as const;
 
 export type DataValidationResult = {
   dut_id: string;
+  scenario: {
+    id: string;
+    name: string;
+    category: string;
+    ai_case: string;
+  };
   passed: boolean;
   score: number;
   metrics: {

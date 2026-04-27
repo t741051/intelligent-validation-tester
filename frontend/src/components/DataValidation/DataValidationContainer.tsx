@@ -15,6 +15,7 @@ import { BaselineCard } from "./BaselineCard";
 import { BaselineEditorDialog } from "./BaselineEditorDialog";
 import { DataValidationDutList } from "./DataValidationDutList";
 import { RegisterDutDialog } from "./RegisterDutDialog";
+import { RunValidationDialog } from "./RunValidationDialog";
 import { ValidationResultCard } from "./ValidationResultCard";
 
 export type DataValidationDutType = "SMO" | "RIC";
@@ -24,6 +25,7 @@ export function DataValidationContainer({ dutType }: { dutType: DataValidationDu
   const [selected, setSelected] = useState<Dut | null>(null);
   const [editorOpen, setEditorOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
+  const [runOpen, setRunOpen] = useState(false);
 
   const { baseline, isLoading: baselineLoading, save, isSaving } = useBaseline(selected?.id ?? null);
   const { run, result, isRunning, reset } = useDataValidationRun();
@@ -69,7 +71,7 @@ export function DataValidationContainer({ dutType }: { dutType: DataValidationDu
             />
             <div className="flex justify-end">
               <Button
-                onClick={() => run(selected.id)}
+                onClick={() => setRunOpen(true)}
                 disabled={isRunning || !baseline}
               >
                 <Play className="w-4 h-4 mr-2" />
@@ -90,6 +92,19 @@ export function DataValidationContainer({ dutType }: { dutType: DataValidationDu
           onSubmit={async (input) => {
             await save(input);
             setEditorOpen(false);
+          }}
+        />
+      )}
+      {selected && baseline && (
+        <RunValidationDialog
+          open={runOpen}
+          onOpenChange={setRunOpen}
+          dutName={selected.name}
+          baseline={baseline}
+          isRunning={isRunning}
+          onRun={async (scenarioId) => {
+            await run({ dutId: selected.id, scenarioId });
+            setRunOpen(false);
           }}
         />
       )}

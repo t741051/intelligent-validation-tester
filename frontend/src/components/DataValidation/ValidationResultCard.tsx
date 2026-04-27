@@ -6,14 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DataValidationResult } from "@/types/dataQuality";
 
 export function ValidationResultCard({ result }: { result: DataValidationResult }) {
-  const { metrics, thresholds, passed, score } = result;
+  const { scenario, metrics, thresholds, passed, score } = result;
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>驗證結果</CardTitle>
-            <p className="text-sm text-white/60">整體分數 {score}</p>
+            <p className="text-sm text-white/60">
+              情境 <span className="text-white/80">{scenario.name}</span> · 整體分數 {score}
+            </p>
           </div>
           <Badge tone={passed ? "green" : "red"}>
             {passed ? (

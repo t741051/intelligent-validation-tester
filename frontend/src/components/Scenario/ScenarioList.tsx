@@ -1,5 +1,5 @@
 "use client";
-import { Eye, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,10 +12,11 @@ import { SCENARIO_CATEGORY_LABEL, VALIDATION_TYPE_LABEL } from "@/types/scenario
 type Props = {
   scenarios: TestScenario[];
   isLoading: boolean;
+  onEdit: (scenario: TestScenario) => void;
   onDelete: (id: string) => void;
 };
 
-export function ScenarioList({ scenarios, isLoading, onDelete }: Props) {
+export function ScenarioList({ scenarios, isLoading, onEdit, onDelete }: Props) {
   return (
     <Card>
       <CardContent className="p-0">
@@ -79,6 +80,12 @@ export function ScenarioList({ scenarios, isLoading, onDelete }: Props) {
                             <Eye className="w-4 h-4" />
                           </Button>
                         </Link>
+                        <Button
+                          size="icon" variant="ghost" aria-label="編輯"
+                          onClick={() => onEdit(s)}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
                         <Button
                           size="icon" variant="ghost" aria-label="刪除"
                           onClick={() => onDelete(s.id)}
