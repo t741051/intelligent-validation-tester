@@ -1,5 +1,6 @@
 "use client";
 import { Eye, Pencil, RefreshCw } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +18,8 @@ type Props = {
   onSelect: (dut: Dut) => void;
   onRefresh?: (dut: Dut) => void;
   refreshingId?: string | null;
+  /** Optional toolbar shown next to the card title — e.g. 刷新狀態 / 新增 DUT */
+  actions?: ReactNode;
 };
 
 function responseTimeClass(ms: number | null) {
@@ -26,12 +29,23 @@ function responseTimeClass(ms: number | null) {
   return "text-mint-300";
 }
 
-export function DutList({ duts, isLoading, selectedId, onSelect, onRefresh, refreshingId }: Props) {
+export function DutList({
+  duts, isLoading, selectedId, onSelect, onRefresh, refreshingId, actions,
+}: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>DUT 設備列表</CardTitle>
-        <p className="text-sm text-white/60">所有待驗證的 DUT 設備及其連接狀態</p>
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <CardTitle>DUT 設備列表</CardTitle>
+            <p className="text-sm text-white/60">所有待驗證的 DUT 設備及其連接狀態</p>
+          </div>
+          {actions && (
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              {actions}
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="p-0">
         {isLoading ? (
@@ -40,11 +54,10 @@ export function DutList({ duts, isLoading, selectedId, onSelect, onRefresh, refr
           <div className="p-12 text-center text-white/40">尚未新增 DUT</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm dut-list-table">
               <thead>
                 <tr className="text-left text-white/60 bg-white/5 border-b">
                   <th className="px-4 py-3">設備資訊</th>
-                  <th className="px-4 py-3">類型</th>
                   <th className="px-4 py-3">Endpoint</th>
                   <th className="px-4 py-3">部署場域</th>
                   <th className="px-4 py-3">狀態</th>
@@ -68,9 +81,6 @@ export function DutList({ duts, isLoading, selectedId, onSelect, onRefresh, refr
                       <td className="px-4 py-3">
                         <div className="font-medium">{d.name}</div>
                         <div className="text-xs text-white/60 font-mono">{d.id.slice(0, 8)}</div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <Badge tone="gray">{d.type}</Badge>
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-white/70">{d.endpoint}</td>
                       <td className="px-4 py-3">

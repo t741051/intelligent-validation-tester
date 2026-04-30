@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useSites } from "@/hooks/Site/useSites";
 import { useEditModeStore, useIsEditing } from "@/stores/editModeStore";
+import { useIsWallMode } from "@/stores/wallModeStore";
 import type { Region } from "@/types/common";
 
 import { EditModeToggle } from "./EditModeToggle";
@@ -20,6 +21,7 @@ export function SiteManagementContainer({ region }: { region: Region }) {
   const { data, isLoading } = useSites(region);
   const sites = data?.items ?? [];
   const isEditing = useIsEditing();
+  const isWall = useIsWallMode();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Reset to view mode on mount/unmount so edit state never bleeds to other pages.
@@ -41,13 +43,17 @@ export function SiteManagementContainer({ region }: { region: Region }) {
 
   return (
     <>
-      <PageHeader title={TITLE[region] ?? "場域管理"}>
-        <EditModeToggle />
-      </PageHeader>
+      {/* 電視牆模式下不渲染 PageHeader — 標題已在 app header bar,
+          檢視/編輯切換移到 SiteDetail 頂端的場域資訊 bar,可省下垂直空間。 */}
+      {!isWall && (
+        <PageHeader title={TITLE[region] ?? "場域管理"}>
+          <EditModeToggle />
+        </PageHeader>
+      )}
       {isLoading ? (
         <div className="text-white/40">載入中…</div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-4">
+        <div className="site-mgmt-grid grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-4">
           <div className="space-y-3">
             {isEditing && <SiteCreateForm region={region} />}
             <SiteList
@@ -60,8 +66,13 @@ export function SiteManagementContainer({ region }: { region: Region }) {
             {selected ? (
               <SiteDetail site={selected} />
             ) : (
-              <div className="text-center text-white/40 py-12 border border-dashed rounded-item">
-                左側選擇場域以檢視詳情
+              <div className="text-center text-white/40 py-12 border border-dashed rounded-item space-y-4">
+                {isWall && (
+                  <div className="flex justify-center">
+                    <EditModeToggle />
+                  </div>
+                )}
+                <div>左側選擇場域以檢視詳情</div>
               </div>
             )}
           </div>

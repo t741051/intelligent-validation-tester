@@ -12,9 +12,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 import { cn } from "@/lib/cn";
 import { useUiStore } from "@/stores/uiStore";
+import { useIsWallMode } from "@/stores/wallModeStore";
+
+// 電視牆模式下隱藏的分支(尚未完成 wall layout 適配)
+const WALL_HIDDEN_IDS = new Set(["data-validation", "intelligence-validation"]);
 
 type NavLeaf = { kind: "leaf"; id: string; href: string; label: string; icon?: LucideIcon };
 type NavBranch = {
@@ -141,7 +146,10 @@ function NavTree({
           );
         }
         const branchActive = hasActiveDescendant(node, pathname);
-        const expanded = expandedNavIds.includes(node.id) || branchActive;
+        // Only the explicit list controls expansion now — auto-expand on
+        // navigation is handled once via `ensureExpanded` below, so the user
+        // can collapse a currently-active branch without it springing back.
+        const expanded = expandedNavIds.includes(node.id);
         const BranchIcon = node.icon;
         return (
           <div key={node.id}>
@@ -177,10 +185,48 @@ function NavTree({
   );
 }
 
+/**
+ * Walks NAV and returns the ids of every branch whose subtree contains the
+ * leaf matching `pathname`. Used on navigation to auto-expand the path.
+ */
+function activeAncestorIds(pathname: string): string[] {
+  const out: string[] = [];
+  const walk = (nodes: NavNode[], parents: string[]): boolean => {
+    let foundHere = false;
+    for (const n of nodes) {
+      if (n.kind === "leaf") {
+        if (pathname === n.href || pathname.startsWith(n.href + "/")) {
+          out.push(...parents);
+          foundHere = true;
+        }
+      } else if (walk(n.children, [...parents, n.id])) {
+        foundHere = true;
+      }
+    }
+    return foundHere;
+  };
+  walk(NAV, []);
+  return out;
+}
+
 export function Sidebar({ className }: { className?: string }) {
   const pathname = usePathname() ?? "";
   const expandedNavIds = useUiStore((s) => s.expandedNavIds);
   const toggleNavItem = useUiStore((s) => s.toggleNavItem);
+  const ensureExpanded = useUiStore((s) => s.ensureExpanded);
+  const isWall = useIsWallMode();
+  const nav = isWall ? NAV.filter((n) => !WALL_HIDDEN_IDS.has(n.id)) : NAV;
+
+  // On every navigation, make sure the branches leading to the current page
+  // are expanded — but only ADD ids, never remove. This way a manually
+  // collapsed branch stays collapsed even if it contains the active leaf.
+  useEffect(() => {
+    const ids = activeAncestorIds(pathname);
+    if (ids.length) ensureExpanded(ids);
+    // Intentionally only run on path change. expandedNavIds is set by this
+    // call, listing it here would form a feedback loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return (
     <aside className={cn("border-r border-white/10 bg-navy-600/70 backdrop-blur-sm w-64 flex-shrink-0 overflow-y-auto", className)}>
@@ -190,7 +236,7 @@ export function Sidebar({ className }: { className?: string }) {
       </div>
       <nav className="p-2">
         <NavTree
-          nodes={NAV}
+          nodes={nav}
           pathname={pathname}
           depth={0}
           expandedNavIds={expandedNavIds}

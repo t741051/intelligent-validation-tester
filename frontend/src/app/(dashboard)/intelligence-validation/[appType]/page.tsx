@@ -9,7 +9,7 @@ export default async function IntelligenceValidationPage({
   return (
     <>
       <PageHeader title={`智慧程度驗證 - ${appType}`} />
-      <p className="text-gray-500">待實作:應用提交 + AI Case 選擇 + Baseline 比較圖。</p>
+      <p className="text-white/60">待實作:應用提交 + AI Case 選擇 + Baseline 比較圖。</p>
     </>
   );
 }

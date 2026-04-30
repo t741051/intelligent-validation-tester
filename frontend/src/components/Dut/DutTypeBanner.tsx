@@ -10,7 +10,7 @@ const STYLES: Record<DutType, { bg: string; border: string; dot: string; text: s
 export function DutTypeBanner({ dutType }: { dutType: DutType }) {
   const s = STYLES[dutType];
   return (
-    <div className={`p-3 rounded-item border ${s.bg} ${s.border} flex items-center gap-2`}>
+    <div className={`w-fit p-3 rounded-item border ${s.bg} ${s.border} flex items-center gap-2`}>
       <div className={`w-3 h-3 rounded ${s.dot}`} />
       <span className={`text-sm font-medium ${s.text}`}>
         當前檢視:{dutType} 設備

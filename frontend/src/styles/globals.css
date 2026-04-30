@@ -27,3 +27,383 @@ input, select, textarea { color-scheme: dark; }
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ========================================================================
+   Wall mode — 11520×3240 video wall (6×3 of 1920×1080), single HDMI feed.
+   Activated by `.wall-mode` class on <html> via wallModeStore + WallModeApplier.
+   Strategy: scale up via root font-size (rem-based) + bigger spacing tokens
+   + bezel-aware grid gutters at fixed pixel positions.
+   ======================================================================== */
+
+html.wall-mode {
+  /* Tailwind sizes are mostly rem-based.  Bumping root size 16→48 grows all
+     `text-sm` / `p-4` / `gap-4` / `text-3xl` / etc. by 3× automatically. */
+  font-size: 48px;
+  /* Clip the oversized body so the scaled-down preview doesn't create scrollbars
+     on the html element itself. */
+  overflow: hidden;
+}
+
+html.wall-mode body {
+  /* Logical canvas is the full wall size, regardless of actual viewport.
+     `transform: scale(...)` is applied imperatively via WallModeApplier
+     (JS-computed), so we only declare the canvas size here. */
+  width: 11520px;
+  height: 3240px;
+  min-width: 0;
+  min-height: 0;
+  transform-origin: top left;
+}
+
+/* AppShell uses `flex h-screen` (height: 100vh).  In wall mode the actual
+   viewport is the laptop (~1080px) but body is 3240px — overriding h-screen
+   to mean "fill body" makes content use the whole canvas vertically. */
+html.wall-mode .h-screen {
+  height: 100% !important;
+}
+
+/* === Header (chrome) === */
+html.wall-mode header {
+  height: 7rem !important;             /* 336px */
+}
+html.wall-mode header span {
+  font-size: 2rem !important;          /* 96px user email */
+}
+html.wall-mode header button {
+  font-size: 2rem !important;          /* 96px button text — wall-mode toggle, etc. */
+  padding: 0.75rem 1.75rem !important;
+  height: auto !important;
+  min-height: 3.5rem;
+}
+html.wall-mode header svg {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+/* Icon-only buttons in header (logout, sidebar toggle) — keep them square */
+html.wall-mode header button.h-9.w-9 {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+/* Header now hosts the page title (left-aligned, large) so the page body
+   below has more vertical room for content. */
+html.wall-mode .header-title {
+  font-size: 2.75rem !important;       /* 132px */
+  line-height: 1.1 !important;
+}
+html.wall-mode .header-subtitle {
+  font-size: 1.5rem !important;        /* 72px */
+  line-height: 1.3 !important;
+}
+
+/* Title now lives in Header — hide the duplicate <h1> + subtitle in <main>. */
+html.wall-mode main h1,
+html.wall-mode main h1 + p,
+html.wall-mode main > p:first-of-type {
+  display: none !important;
+}
+
+/* PageHeader is a flex row with `justify-between` between <h1> and the
+   children (banner / buttons). With <h1> hidden in wall mode the flex
+   layout collapses to a single child — push it right. */
+html.wall-mode main > div:has(> h1) {
+  justify-content: flex-end !important;
+}
+
+/* === Sidebar === */
+/* 1920px = exactly 1 TV cell wide, so the right edge aligns with the first
+   vertical bezel (x=1920). Main content then starts in cell 2 with no chance
+   of being cut by that seam. */
+html.wall-mode aside {
+  width: 1920px !important;
+}
+html.wall-mode aside p {
+  font-size: 2.5rem !important;        /* 120px title */
+  line-height: 1.2 !important;
+}
+html.wall-mode aside p + p {
+  font-size: 1.25rem !important;       /* 60px v1.0.0 sub-line */
+}
+/* All nav links / branch buttons in sidebar */
+html.wall-mode aside nav a,
+html.wall-mode aside nav button {
+  font-size: 2rem !important;          /* 96px nav items */
+  padding: 1rem 1.25rem !important;
+}
+html.wall-mode aside nav svg {
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+}
+
+/* === Page-level chrome (PageHeader title, subtitle paragraphs) === */
+html.wall-mode main h1 {
+  font-size: 4rem !important;          /* 192px page title */
+  line-height: 1 !important;
+  letter-spacing: 0 !important;        /* cancel `tracking-tight` which crops scaled glyphs */
+  margin-bottom: 0.5rem !important;
+}
+
+/* Compress main padding so the page content (table/cards below
+   PageHeader) sits as close to the top of row 2 (y=1080) as possible. */
+html.wall-mode main {
+  padding-top: 1.5rem !important;
+  padding-bottom: 4rem !important;
+}
+/* Subtitle paragraph immediately after PageHeader */
+html.wall-mode main h1 + p,
+html.wall-mode main > p {
+  font-size: 2rem !important;          /* 96px */
+  line-height: 1.4 !important;
+  color: rgba(255,255,255,0.8) !important;
+}
+
+/* Buttons inside main content (PageHeader's 刷新/新增, form submit, etc.)
+   should match the page-level scale. */
+html.wall-mode main button {
+  font-size: 1.5rem !important;        /* 72px */
+  padding: 0.75rem 1.25rem !important;
+  height: auto !important;
+  min-height: 3rem;
+}
+html.wall-mode main button svg {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}
+
+/* Icon-only buttons (size="icon" → tailwind `h-9 w-9`) need to stay square
+   and big enough to host the larger icon — carve them out of the rule above
+   so they aren't strangled by oversized horizontal padding. */
+html.wall-mode main button.h-9.w-9 {
+  width: 4rem !important;              /* 192px square */
+  height: 4rem !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Disabled icon button (e.g. 編輯) keeps a visible outline at half opacity
+   so users see the affordance even though it's not yet functional. */
+html.wall-mode main button.h-9.w-9:disabled {
+  opacity: 0.5 !important;
+}
+
+/* Avoid horizontal clipping at scaled sizes — make sure text containers
+   don't accidentally cut characters. */
+html.wall-mode main * {
+  text-rendering: geometricPrecision;
+}
+
+/* SiteManagementContainer wall-mode layout.
+   Left pane (SiteList + 網元 + 攝影機) sits in TV col 2 with comfortable
+   buffer from both bezels (x=1920 sidebar edge and x=3840 col2/col3 seam). */
+html.wall-mode .site-mgmt-grid {
+  grid-template-columns: 1700px 1fr !important;
+}
+/* Wall-mode map canvas: 2 TV cells wide × 1500px tall (≈ 2.56:1).
+   Without these overrides aspect-video on a 7700px column gives a 4300px-tall
+   canvas that overflows vertically and a footprint the user doesn't need. */
+html.wall-mode .site-layout-canvas {
+  aspect-ratio: auto !important;
+  width: 3840px !important;
+  height: 1500px !important;
+  max-width: 100% !important;
+}
+
+/* Cap the site-info bar (場域名稱 + badges + 編輯切換) to ~2 TV cells wide
+   so the row doesn't span all the way across cols 3-6 — bezels at x=5760,
+   7680, 9600 would otherwise slice through the address text or the toggle. */
+html.wall-mode .site-info-card {
+  max-width: 3840px;
+}
+
+/* 網元 + 攝影機 panes sit beside the map, in the right portion of row 1.
+   Width caps so each pane stays inside its TV column:
+     網元   ends before col 4/col 5 bezel (x=9594-9606)
+     攝影機 fits in col 6 (right of x=9606), takes the remainder
+   Negative margin-top lifts both panes so their tops align roughly with
+   the site-info bar row (which is taller than where the flex row would
+   naturally start). They don't overlap the bar horizontally — site-info
+   ends at x=7580, panes start at x=7628. */
+html.wall-mode .site-stations-pane {
+  flex: 0 0 1900px !important;
+  max-width: 1900px !important;
+  margin-top: -260px !important;
+}
+html.wall-mode .site-cameras-pane {
+  flex: 1 1 auto !important;
+  margin-top: -260px !important;
+}
+
+/* DutList table column alignment in wall mode (8 columns).
+   Wall canvas: TV bezels at x=1920, 3840, 5760, 7680, 9600.
+   Table starts at x=2112 (sidebar 1920 + main padding 192) and ends at x=11328.
+   Strategy: every column boundary lands ON a bezel (or within a single TV
+   cell), so NO column crosses a bezel.
+
+     | TV col 2 | TV col 3 | TV col 4 | TV col 5 | TV col 6 |
+     | 1728     | 1920     | 1920     | 1920     | 1728     |
+     |          |          | 960|960  | 960|960  | 864|864  |
+     | 設備資訊 | Endpoint | 場域|狀態| 格式|回應 | 檢查|操作|
+*/
+html.wall-mode .dut-list-table {
+  table-layout: fixed !important;
+}
+html.wall-mode .dut-list-table th:nth-child(1),
+html.wall-mode .dut-list-table td:nth-child(1) { width: 1728px; } /* 設備資訊  TV col 2 */
+html.wall-mode .dut-list-table th:nth-child(2),
+html.wall-mode .dut-list-table td:nth-child(2) { width: 1920px; } /* Endpoint  TV col 3 */
+html.wall-mode .dut-list-table th:nth-child(3),
+html.wall-mode .dut-list-table td:nth-child(3) { width: 960px; }  /* 部署場域  TV col 4 左 */
+html.wall-mode .dut-list-table th:nth-child(4),
+html.wall-mode .dut-list-table td:nth-child(4) { width: 960px; }  /* 狀態      TV col 4 右 */
+html.wall-mode .dut-list-table th:nth-child(5),
+html.wall-mode .dut-list-table td:nth-child(5) { width: 960px; }  /* 資料格式  TV col 5 左 */
+html.wall-mode .dut-list-table th:nth-child(6),
+html.wall-mode .dut-list-table td:nth-child(6) { width: 960px; }  /* 回應時間  TV col 5 右 */
+html.wall-mode .dut-list-table th:nth-child(7),
+html.wall-mode .dut-list-table td:nth-child(7) { width: 864px; }  /* 最後檢查  TV col 6 左 */
+html.wall-mode .dut-list-table th:nth-child(8),
+html.wall-mode .dut-list-table td:nth-child(8) { width: 864px; }  /* 操作      TV col 6 右 */
+
+/* KPI cards: the most prominent element on overview, should feel "war-room"
+   sized — tall with the number filling most of the card. Targets .kpi-card
+   and .kpi-card-value classes added to KpiCard component. */
+html.wall-mode .kpi-card {
+  min-height: 700px;
+}
+html.wall-mode .kpi-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem !important;
+}
+html.wall-mode .kpi-card-label {
+  font-size: 2rem !important;     /* 96px */
+}
+html.wall-mode .kpi-card-value {
+  font-size: 6rem !important;     /* 288px headline number */
+  line-height: 1 !important;
+  font-weight: 700 !important;
+}
+
+/* === Global minimum text size in wall mode ===
+   Smallest text in any component should be at least 2rem (96px wall canvas
+   ≈ 16px on a 1920×1080 preview), matching the page subtitle. Anything
+   smaller becomes unreadable when scaled down.
+
+   IMPORTANT: must override line-height too — Tailwind's `.text-sm` ships with
+   `line-height: 1.25rem` (20px). Bumping font-size to 32px without bumping
+   line-height makes glyphs spill out of the line-box and overlap neighbours. */
+html.wall-mode .text-xs,
+html.wall-mode .text-sm,
+html.wall-mode .text-base {
+  font-size: 2rem !important;          /* 96px */
+  line-height: 1.4 !important;
+}
+html.wall-mode .text-lg {
+  font-size: 2.25rem !important;       /* 108px */
+  line-height: 1.4 !important;
+}
+html.wall-mode .text-xl {
+  font-size: 2.5rem !important;        /* 120px */
+  line-height: 1.3 !important;
+}
+
+/* Bezel-safe gutters.
+   The 6×3 grid has internal seams at:
+     vertical:   x = 1920, 3840, 5760, 7680, 9600
+     horizontal: y = 1080, 2160
+   We add fixed-position thin transparent bands at these lines whose only job
+   is to *visually mark* the bezel — content layout itself stays a normal flow,
+   we just enforce that page-level grids in the dashboard use larger gaps so
+   they tend not to land important text exactly on a seam.
+
+   The bands are pure CSS overlays (pointer-events: none) and use blend mode
+   `multiply` with a near-black tint to subtly darken across the seam. Useful
+   while developing on a normal monitor to see where bezels would land. */
+/* === Dialogs in wall mode ===
+   Default Dialog uses `w-[calc(100vw-2rem)] max-w-{lg|xl|2xl}` which resolves
+   `vw` against the actual laptop viewport (1920px), giving a tiny dialog when
+   scaled into the 11520-wide wall canvas. Override to a wall-relative width. */
+html.wall-mode [role="dialog"] {
+  width: 5760px !important;             /* ~50% of wall width = readable */
+  max-width: 5760px !important;
+  max-height: 2700px !important;
+  padding: 4rem !important;
+}
+html.wall-mode [role="dialog"] h2 {
+  font-size: 3rem !important;           /* 144px DialogTitle */
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+}
+html.wall-mode [role="dialog"] [id$="-description"],
+html.wall-mode [role="dialog"] p {
+  font-size: 2rem !important;           /* 96px DialogDescription / paragraphs */
+  line-height: 1.4 !important;
+}
+/* Dialog inner sections (info boxes) — match the bumped-up content */
+html.wall-mode [role="dialog"] h4 {
+  font-size: 2.25rem !important;        /* 108px */
+  margin-bottom: 1rem !important;
+}
+html.wall-mode [role="dialog"] ul,
+html.wall-mode [role="dialog"] li {
+  font-size: 2rem !important;
+  line-height: 1.5 !important;
+}
+/* Dialog buttons — Dialog is portaled outside <main> so the main-scope
+   button rules don't apply. Mirror them here. */
+html.wall-mode [role="dialog"] button {
+  font-size: 1.75rem !important;        /* 84px */
+  padding: 1rem 2rem !important;
+  height: auto !important;
+  min-height: 4rem;                     /* 192px tall buttons */
+}
+html.wall-mode [role="dialog"] button svg {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+}
+/* Icon-only Close button (top-right X) — keep it square and not overgrown */
+html.wall-mode [role="dialog"] button.h-9.w-9,
+html.wall-mode [role="dialog"] [type="button"][aria-label="Close"] {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+
+/* Bezel guides — sit on top of content as REFERENCE, so content that lands
+   on a bezel position is visually obvious. They don't block clicks
+   (pointer-events: none). Production wall display: switch this off. */
+html.wall-mode body::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 11520px;
+  height: 3240px;
+  pointer-events: none;
+  z-index: 9999;
+  background-image:
+    /* Vertical bezels at x = 1920, 3840, 5760, 7680, 9600 (12px wide) */
+    linear-gradient(to right, transparent 1914px, rgba(255,255,255,0.85) 1914px, rgba(255,255,255,0.85) 1926px, transparent 1926px),
+    linear-gradient(to right, transparent 3834px, rgba(255,255,255,0.85) 3834px, rgba(255,255,255,0.85) 3846px, transparent 3846px),
+    linear-gradient(to right, transparent 5754px, rgba(255,255,255,0.85) 5754px, rgba(255,255,255,0.85) 5766px, transparent 5766px),
+    linear-gradient(to right, transparent 7674px, rgba(255,255,255,0.85) 7674px, rgba(255,255,255,0.85) 7686px, transparent 7686px),
+    linear-gradient(to right, transparent 9594px, rgba(255,255,255,0.85) 9594px, rgba(255,255,255,0.85) 9606px, transparent 9606px),
+    /* Horizontal bezels at y = 1080, 2160 */
+    linear-gradient(to bottom, transparent 1074px, rgba(255,255,255,0.85) 1074px, rgba(255,255,255,0.85) 1086px, transparent 1086px),
+    linear-gradient(to bottom, transparent 2154px, rgba(255,255,255,0.85) 2154px, rgba(255,255,255,0.85) 2166px, transparent 2166px);
+  background-repeat: no-repeat;
+}
+
+/* Keep page grids generous in wall mode so cards rarely cross seams.
+   These are utility nudges — feature components opt in via Tailwind classes. */
+html.wall-mode .wall-grid-gap > * + * { margin-top: 64px; }
+html.wall-mode .wall-pad { padding: 64px; }
+
+/* Cards in wall mode get bigger internal spacing to feel right at scale */
+html.wall-mode main { padding: 4rem; }

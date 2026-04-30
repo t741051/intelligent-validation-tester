@@ -44,8 +44,10 @@ export function SiteList({
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <div className="font-medium truncate">{s.name}</div>
-                <div className="text-xs text-white/60 truncate">
+                <div className="text-lg font-semibold leading-tight truncate">
+                  {s.name}
+                </div>
+                <div className="mt-0.5 text-xs text-white/50 truncate">
                   {s.address || "—"}
                 </div>
               </div>

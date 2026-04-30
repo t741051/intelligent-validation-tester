@@ -10,7 +10,6 @@ import { useRegisterDut } from "@/hooks/DataValidation/useRegisterDut";
 import { useDutList } from "@/hooks/Dut/useDutList";
 import type { Dut } from "@/types/dut";
 
-import { DutTypeBanner } from "../Dut/DutTypeBanner";
 import { BaselineCard } from "./BaselineCard";
 import { BaselineEditorDialog } from "./BaselineEditorDialog";
 import { DataValidationDutList } from "./DataValidationDutList";
@@ -54,7 +53,6 @@ export function DataValidationContainer({ dutType }: { dutType: DataValidationDu
         針對已註冊的 {dutType} 設備執行資料完整性、準確性與即時性驗證
       </p>
       <div className="space-y-4">
-        <DutTypeBanner dutType={dutType} />
         <DataValidationDutList
           duts={duts}
           isLoading={isLoading}

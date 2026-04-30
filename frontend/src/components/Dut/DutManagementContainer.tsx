@@ -15,7 +15,6 @@ import type { Dut, InterfaceTestResult } from "@/types/dut";
 import { DutDetailCard } from "./DutDetailCard";
 import { DutFormDialog } from "./DutFormDialog";
 import { DutList } from "./DutList";
-import { DutTypeBanner } from "./DutTypeBanner";
 import { RunInterfaceTestDialog } from "./RunInterfaceTestDialog";
 
 export function DutManagementContainer({ dutType }: { dutType: DutType }) {
@@ -67,29 +66,12 @@ export function DutManagementContainer({ dutType }: { dutType: DutType }) {
 
   return (
     <>
-      <PageHeader title={`連接介面驗證 - ${dutType}`}>
-        <Button
-          variant="outline"
-          onClick={async () => {
-            await refreshAll();
-            await refresh();
-          }}
-          disabled={isRefreshing}
-        >
-          <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
-          {isRefreshing ? "檢查中..." : "刷新狀態"}
-        </Button>
-        <Button onClick={() => setFormOpen(true)}>
-          <Plus className="w-4 h-4 mr-2" /> 新增 DUT
-        </Button>
-      </PageHeader>
+      <PageHeader title={`連接介面驗證 - ${dutType}`} />
       <p className="-mt-3 mb-4 text-sm text-white/70">
         檢查所有 {dutType} 設備的接口介面是否正常運作
       </p>
 
       <div className="space-y-4">
-        <DutTypeBanner dutType={dutType} />
-
         <DutList
           duts={duts}
           isLoading={isLoading}
@@ -100,6 +82,24 @@ export function DutManagementContainer({ dutType }: { dutType: DutType }) {
           }}
           onRefresh={refreshOne}
           refreshingId={refreshingId}
+          actions={
+            <>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  await refreshAll();
+                  await refresh();
+                }}
+                disabled={isRefreshing}
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
+                {isRefreshing ? "檢查中..." : "刷新狀態"}
+              </Button>
+              <Button onClick={() => setFormOpen(true)}>
+                <Plus className="w-4 h-4 mr-2" /> 新增 DUT
+              </Button>
+            </>
+          }
         />
 
         {selected && (

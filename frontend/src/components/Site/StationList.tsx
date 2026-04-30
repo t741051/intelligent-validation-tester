@@ -1,5 +1,5 @@
 "use client";
-import { Plus } from "lucide-react";
+import { ChevronRight, Plus } from "lucide-react";
 import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -50,62 +50,56 @@ export function StationList({
       {stations.length === 0 ? (
         <p className="text-sm text-white/40">此場域尚無網元。</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-white/60 border-b">
-                <th className="py-2 pr-2">Code</th>
-                <th className="py-2 pr-2">名稱</th>
-                <th className="py-2 pr-2">類型</th>
-                <th className="py-2 pr-2">管理 IP</th>
-                <th className="py-2 pr-2">廠商</th>
-                <th className="py-2 pr-2">狀態</th>
-                <th className="py-2" />
-              </tr>
-            </thead>
-            <tbody>
-              {stations.map((s) => (
-                <tr key={s.id} className="border-b last:border-0">
-                  <td className="py-2 pr-2 font-mono text-xs">{s.code}</td>
-                  <td className="py-2 pr-2">{s.name}</td>
-                  <td className="py-2 pr-2 uppercase">{s.node_type}</td>
-                  <td className="py-2 pr-2 font-mono text-xs text-white/70">
-                    {s.mgmt_ip ? (
-                      <>
-                        {s.mgmt_ip}
-                        {s.mgmt_port ? `:${s.mgmt_port}` : ""}
-                      </>
-                    ) : (
-                      <span className="text-white/40">-</span>
-                    )}
-                  </td>
-                  <td className="py-2 pr-2 text-white/70">
-                    {s.vendor || <span className="text-white/40">-</span>}
-                  </td>
-                  <td className="py-2 pr-2">
-                    <Badge tone={STATUS_TONE[s.status] ?? "gray"}>
-                      {STATUS_LABEL[s.status] ?? s.status}
-                    </Badge>
-                  </td>
-                  <td className="py-2 text-right">
-                    {isEditing && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          if (confirm(`移除網元 ${s.code}?`)) {
-                            deleteStation.mutate(s.code);
-                          }
-                        }}
-                      >
-                        刪除
-                      </Button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="space-y-2">
+          {stations.map((s) => (
+            <details
+              key={s.id}
+              className="group border border-white/10 rounded-item bg-white/[0.02]"
+            >
+              <summary className="p-3 flex items-center gap-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                <ChevronRight className="w-4 h-4 text-white/40 transition-transform group-open:rotate-90 flex-shrink-0" />
+                <span className="font-mono text-xs text-white/70 flex-shrink-0">
+                  {s.code}
+                </span>
+                <span className="font-medium truncate min-w-0 flex-1">{s.name}</span>
+                <Badge tone="gray" className="uppercase flex-shrink-0">
+                  {s.node_type}
+                </Badge>
+                <Badge tone={STATUS_TONE[s.status] ?? "gray"} className="flex-shrink-0">
+                  {STATUS_LABEL[s.status] ?? s.status}
+                </Badge>
+                {isEditing && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="flex-shrink-0"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (confirm(`移除網元 ${s.code}?`)) {
+                        deleteStation.mutate(s.code);
+                      }
+                    }}
+                  >
+                    刪除
+                  </Button>
+                )}
+              </summary>
+              <div className="px-3 pb-3 text-sm text-white/70 space-y-1 border-t border-white/5 pt-2">
+                <div>
+                  <span className="text-white/40">管理 IP:</span>{" "}
+                  <span className="font-mono">
+                    {s.mgmt_ip
+                      ? `${s.mgmt_ip}${s.mgmt_port ? `:${s.mgmt_port}` : ""}`
+                      : "—"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-white/40">廠商:</span> {s.vendor || "—"}
+                </div>
+              </div>
+            </details>
+          ))}
         </div>
       )}
       <StationFormDialog

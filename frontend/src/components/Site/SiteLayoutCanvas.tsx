@@ -104,7 +104,7 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
     <>
       <div
         ref={canvasRef}
-        className="relative w-full aspect-video rounded-section border border-white/10 overflow-hidden select-none"
+        className="site-layout-canvas relative w-full aspect-video rounded-section border border-white/10 overflow-hidden select-none"
         style={
           floorPlanUrl
             ? {
@@ -149,12 +149,12 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
               title={`${s.code} · ${s.name}`}
             >
               <div
-                className="w-9 h-9 rounded-full bg-navy-500 border-2 flex items-center justify-center text-base shadow-mint-glow"
+                className="w-14 h-14 rounded-full bg-navy-500 border-2 flex items-center justify-center text-2xl shadow-mint-glow"
                 style={{ borderColor: STATUS_COLOR[s.status] ?? "#9ca3af" }}
               >
                 📡
               </div>
-              <div className="mt-1 text-xs font-medium text-white/90 bg-navy-500/80 px-1 rounded">
+              <div className="mt-1 text-sm font-medium text-white/90 bg-navy-500/80 px-1.5 rounded">
                 {s.code}
               </div>
             </button>
@@ -187,12 +187,12 @@ export function SiteLayoutCanvas({ siteId, floorPlanUrl, stations }: Props) {
               title={`${c.name}${clickable ? " · 點擊播放" : ""}`}
             >
               <div
-                className="w-9 h-9 rounded-item bg-navy-500 border-2 flex items-center justify-center text-base shadow-sm"
+                className="w-14 h-14 rounded-item bg-navy-500 border-2 flex items-center justify-center text-2xl shadow-sm"
                 style={{ borderColor: c.status === "online" ? "#80FFE8" : "#576378" }}
               >
                 📹
               </div>
-              <div className="mt-1 text-xs font-medium text-white/90 bg-navy-500/80 px-1 rounded">
+              <div className="mt-1 text-sm font-medium text-white/90 bg-navy-500/80 px-1.5 rounded">
                 {c.name || c.id.slice(0, 4)}
               </div>
             </button>

@@ -1,5 +1,5 @@
 "use client";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -48,49 +48,59 @@ export function CameraList({ siteId }: { siteId: string }) {
       ) : (
         <div className="space-y-2">
           {cameras.map((c) => (
-            <div
+            <details
               key={c.id}
-              className="flex items-center justify-between p-3 border rounded-item"
+              className="group border border-white/10 rounded-item bg-white/[0.02]"
             >
-              <div className="min-w-0">
-                <div className="font-medium">{c.name || c.id.slice(0, 8)}</div>
-                <div className="text-xs text-white/60 font-mono truncate max-w-xs">
-                  {c.rtsp_url || c.stream_url || "(未設定串流)"}
+              <summary className="p-3 flex items-center gap-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                <ChevronRight className="w-4 h-4 text-white/40 transition-transform group-open:rotate-90 flex-shrink-0" />
+                <span className="font-medium truncate min-w-0 flex-1">
+                  {c.name || c.id.slice(0, 8)}
+                </span>
+                <Badge tone={c.status === "online" ? "green" : "gray"} className="flex-shrink-0">
+                  {c.status === "online" ? "線上" : "離線"}
+                </Badge>
+                <div
+                  className="flex gap-1 flex-shrink-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {c.hls_url && (
+                    <Button size="sm" variant="outline" onClick={(e) => { e.preventDefault(); setPlaying(c); }}>
+                      播放
+                    </Button>
+                  )}
+                  {isEditing && (
+                    <>
+                      <Button
+                        size="icon" variant="ghost" aria-label="編輯"
+                        onClick={(e) => { e.preventDefault(); setEditing(c); setFormOpen(true); }}
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        size="icon" variant="ghost" aria-label="刪除"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (confirm(`刪除攝影機 ${c.name}?`)) void remove(c.id);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )}
                 </div>
-                <div className="flex items-center gap-2 mt-1">
+              </summary>
+              <div className="px-3 pb-3 text-sm text-white/70 space-y-2 border-t border-white/5 pt-2">
+                <div className="font-mono text-xs break-all">
+                  <span className="text-white/40">串流:</span>{" "}
+                  {c.rtsp_url || c.stream_url || "(未設定)"}
+                </div>
+                <div className="flex items-center gap-2">
                   <Badge tone="gray">{c.resolution}</Badge>
                   <Badge tone="gray">{c.fps} fps</Badge>
-                  <Badge tone={c.status === "online" ? "green" : "gray"}>
-                    {c.status === "online" ? "線上" : "離線"}
-                  </Badge>
                 </div>
               </div>
-              <div className="flex gap-1">
-                {c.hls_url && (
-                  <Button size="sm" variant="outline" onClick={() => setPlaying(c)}>
-                    播放
-                  </Button>
-                )}
-                {isEditing && (
-                  <>
-                    <Button
-                      size="icon" variant="ghost" aria-label="編輯"
-                      onClick={() => { setEditing(c); setFormOpen(true); }}
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      size="icon" variant="ghost" aria-label="刪除"
-                      onClick={() => {
-                        if (confirm(`刪除攝影機 ${c.name}?`)) void remove(c.id);
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
+            </details>
           ))}
         </div>
       )}
