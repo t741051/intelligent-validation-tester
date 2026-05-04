@@ -10,6 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { SelectButton } from "@/components/ui/select-button";
+import { useIsWallMode } from "@/stores/wallModeStore";
 import type { DutType, Interface } from "@/types/common";
 import type { DutInput } from "@/types/dut";
 import {
@@ -17,8 +19,6 @@ import {
   DEFAULT_INTERFACES,
 } from "@/types/dut";
 import type { Site } from "@/types/site";
-
-import { DutArchDiagram } from "./DutArchDiagram";
 
 const ENV_LABEL: Record<string, string> = {
   indoor: "室內",
@@ -47,6 +47,7 @@ export function DutFormDialog({
   const [siteId, setSiteId] = useState("");
   const [interfaces, setInterfaces] = useState<Interface[]>(DEFAULT_INTERFACES[dutType]);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const isWall = useIsWallMode();
 
   useEffect(() => {
     if (open) {
@@ -96,64 +97,64 @@ export function DutFormDialog({
           <DialogDescription>填寫 {dutType} 設備的連接資訊</DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
-          <DutArchDiagram dutType={dutType} />
-          <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="dut-name">設備名稱</label>
-            <Input
-              id="dut-name"
-              placeholder="輸入設備名稱"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="dut-site">部署場域</label>
-            <select
-              id="dut-site"
-              className="h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-2 text-sm"
-              value={siteId}
-              onChange={(e) => setSiteId(e.target.value)}
-              required
-            >
-              {sites.length === 0 && <option value="">（尚無場域）</option>}
-              {sites.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}（{ENV_LABEL[s.environment] ?? s.environment}）
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-white/60">
-              DUT 部署在哪個場域。環境類別由場域決定,若無合適場域請先到「場域管理」建立。
-            </p>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="dut-endpoint">API Endpoint</label>
-            <Input
-              id="dut-endpoint"
-              placeholder="192.168.1.100:8080 或 http://smo.example.com/api"
-              value={endpoint}
-              onChange={(e) => setEndpoint(e.target.value)}
-              required
-            />
-            <p className="text-xs text-white/60">
-              可填 IP、主機名或完整 URL。建立時不會測試連線,按「執行介面測試」才會實際連線。
-            </p>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">測試介面</label>
-            <div className="border rounded-item p-3 bg-white/5 grid grid-cols-2 gap-3">
-              {AVAILABLE_INTERFACES[dutType].map((iface) => (
-                <label key={iface} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 rounded border-white/20"
-                    checked={interfaces.includes(iface)}
-                    onChange={() => toggleInterface(iface)}
-                  />
-                  <span className="text-sm">{iface} 介面</span>
-                </label>
-              ))}
+          {/* 電視牆模式:左右兩欄,左邊基本資訊、右邊測試介面;一般模式維持單欄。 */}
+          <div className={isWall ? "grid grid-cols-2 gap-6" : "space-y-4"}>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="dut-name">設備名稱</label>
+                <Input
+                  id="dut-name"
+                  placeholder="輸入設備名稱"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="dut-site">部署場域</label>
+                <SelectButton
+                  id="dut-site"
+                  value={siteId}
+                  onChange={setSiteId}
+                  placeholder={sites.length === 0 ? "（尚無場域）" : undefined}
+                  options={sites.map((s) => ({
+                    value: s.id,
+                    label: `${s.name}（${ENV_LABEL[s.environment] ?? s.environment}）`,
+                  }))}
+                />
+                <p className="text-xs text-white/60">
+                  DUT 部署在哪個場域。環境類別由場域決定,若無合適場域請先到「場域管理」建立。
+                </p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="dut-endpoint">API Endpoint</label>
+                <Input
+                  id="dut-endpoint"
+                  placeholder="192.168.1.100:8080 或 http://smo.example.com/api"
+                  value={endpoint}
+                  onChange={(e) => setEndpoint(e.target.value)}
+                  required
+                />
+                <p className="text-xs text-white/60">
+                  可填 IP、主機名或完整 URL。建立時不會測試連線,按「執行介面測試」才會實際連線。
+                </p>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">測試介面</label>
+              <div className="border rounded-item p-3 bg-white/5 grid grid-cols-2 gap-3">
+                {AVAILABLE_INTERFACES[dutType].map((iface) => (
+                  <label key={iface} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 rounded border-white/20"
+                      checked={interfaces.includes(iface)}
+                      onChange={() => toggleInterface(iface)}
+                    />
+                    <span className="text-sm">{iface} 介面</span>
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">

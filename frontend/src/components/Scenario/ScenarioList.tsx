@@ -21,12 +21,12 @@ export function ScenarioList({ scenarios, isLoading, onEdit, onDelete }: Props) 
     <Card>
       <CardContent className="p-0">
         {isLoading ? (
-          <div className="p-6 text-white/40">載入中…</div>
+          <div className="p-6 text-base text-white/40">載入中…</div>
         ) : scenarios.length === 0 ? (
-          <div className="p-12 text-center text-white/40">尚未建立任何測試情境</div>
+          <div className="p-12 text-center text-lg text-white/40">尚未建立任何測試情境</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-base">
               <thead>
                 <tr className="text-left text-white/60 bg-white/5 border-b">
                   <th className="px-4 py-3">情境名稱</th>

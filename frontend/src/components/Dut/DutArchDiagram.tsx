@@ -23,17 +23,31 @@ function Box({
   );
 }
 
+// All sizes/positions in rem so the diagram auto-scales with the root
+// font-size — regular root 16px keeps the original 220×270 px footprint;
+// wall-mode root 48px scales it 3× to fit the bumped-up label text.
 export function DutArchDiagram({ dutType }: { dutType: DutType }) {
   return (
     <div className="bg-white/5 rounded-item p-3 border border-white/15">
       <div className="text-sm font-medium text-white/80 mb-2">架構位置</div>
       <div className="flex justify-center">
-        <div className="relative" style={{ width: 220, height: 270 }}>
-          <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
+        <div
+          className="relative"
+          style={{ width: "13.75rem", height: "16.875rem" }}
+        >
+          <svg
+            className="absolute inset-0 w-full h-full"
+            viewBox="0 0 220 270"
+            preserveAspectRatio="none"
+            style={{ zIndex: 0 }}
+          >
             <line x1="110" y1="75" x2="110" y2="95" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="3,3" />
             <line x1="110" y1="180" x2="110" y2="200" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="3,3" />
           </svg>
-          <div className="absolute" style={{ left: 10, top: 0, width: 200, zIndex: 1 }}>
+          <div
+            className="absolute"
+            style={{ left: "0.625rem", top: 0, width: "12.5rem", zIndex: 1 }}
+          >
             <div
               className={`border-2 rounded px-2 py-1.5 transition-all ${
                 dutType === "SMO"
@@ -53,7 +67,10 @@ export function DutArchDiagram({ dutType }: { dutType: DutType }) {
               </div>
             </div>
           </div>
-          <div className="absolute" style={{ left: 10, top: 95, width: 200, zIndex: 1 }}>
+          <div
+            className="absolute"
+            style={{ left: "0.625rem", top: "5.9375rem", width: "12.5rem", zIndex: 1 }}
+          >
             <div
               className={`border-2 rounded px-2 py-1.5 transition-all ${
                 dutType === "RIC"
@@ -73,7 +90,10 @@ export function DutArchDiagram({ dutType }: { dutType: DutType }) {
               </div>
             </div>
           </div>
-          <div className="absolute" style={{ left: 10, top: 200, width: 200, zIndex: 1 }}>
+          <div
+            className="absolute"
+            style={{ left: "0.625rem", top: "12.5rem", width: "12.5rem", zIndex: 1 }}
+          >
             <Box title="RAN" subtitle="無線接取網路" active={false} activeClass="" />
           </div>
         </div>

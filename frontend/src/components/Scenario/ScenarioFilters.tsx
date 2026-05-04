@@ -1,4 +1,5 @@
 "use client";
+import { SelectButton } from "@/components/ui/select-button";
 import { useSites } from "@/hooks/Site/useSites";
 import type {
   ScenarioCategory,
@@ -78,16 +79,8 @@ function Select({
 }) {
   return (
     <div>
-      <label className="block text-xs text-white/70 mb-1">{label}</label>
-      <select
-        className="flex h-9 w-full rounded-item border border-white/20 bg-navy-400 text-white px-3 text-sm"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>{o.label}</option>
-        ))}
-      </select>
+      <label className="block text-sm text-white/70 mb-1">{label}</label>
+      <SelectButton value={value} onChange={onChange} options={options} />
     </div>
   );
 }
