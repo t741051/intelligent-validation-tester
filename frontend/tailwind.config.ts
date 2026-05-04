@@ -44,8 +44,12 @@ const config: Config = {
         rapp: { DEFAULT: "#FFC56B", 50: "#2A2010", 100: "#3D2E16" },
       },
       borderRadius: {
-        section: "21px",
-        item: "14px",
+        // rem so they scale with the root font-size — same visual softness
+        // in both regular mode (1rem=16px → 21px / 14px) and wall mode
+        // (1rem=48px → 63px / 42px). Otherwise px values look proportionally
+        // sharper on the much-larger wall canvas.
+        section: "1.3125rem",
+        item: "0.875rem",
       },
       fontFamily: {
         sans: ['"Noto Sans TC"', "system-ui", "-apple-system", "sans-serif"],

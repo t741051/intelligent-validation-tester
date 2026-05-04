@@ -44,6 +44,18 @@ html.wall-mode {
   overflow: hidden;
 }
 
+/* Many cards in wall mode have hard-pinned widths (3840px map, 1900px stations
+   pane, etc.) that are *more* than 3× their regular-mode counterparts, so the
+   3× rem scale on rounded-section / rounded-item ends up looking proportionally
+   sharper. Bump them further so the curve reads at the same visual softness as
+   regular mode on the scaled-down preview. */
+html.wall-mode .rounded-section {
+  border-radius: 2.625rem !important;   /* 126px */
+}
+html.wall-mode .rounded-item {
+  border-radius: 1.5rem !important;     /* 72px */
+}
+
 html.wall-mode body {
   /* Logical canvas is the full wall size, regardless of actual viewport.
      `transform: scale(...)` is applied imperatively via WallModeApplier
