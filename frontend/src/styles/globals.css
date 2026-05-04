@@ -364,6 +364,22 @@ html.wall-mode [role="dialog"] {
   max-height: 2700px !important;
   padding: 4rem !important;
 }
+
+/* DutFormDialog 4-col grid: 對話框中心置中於 wall canvas,寬度 7680(對齊
+   x=1920~9600),內部 padding 4rem=192px,所以 form 內容區是 x=2112~9408。
+   要讓垂直 bezel 線(x=3840、5760、7680)落在欄位 gap 而非欄位中間,各欄
+   寬度需要對齊到 bezel 邊緣。
+     Col 1: 2112 → 3834           寬 1722  (TV col 2 內)
+     gap                          覆蓋 3834~3906(bezel band 3834-3846 在這)
+     Col 2: 3906 → 5754           寬 1848  (跨 col 3 / col 4)
+     gap                          覆蓋 5754~5826(bezel band 5754-5766)
+     Col 3: 5826 → 7674           寬 1848  (跨 col 4 / col 5)
+     gap                          覆蓋 7674~7746(bezel band 7674-7686)
+     Col 4: 7746 → 9408           寬 1662  (TV col 5 內)
+*/
+html.wall-mode .dut-form-grid {
+  grid-template-columns: 1722px 1848px 1848px 1662px !important;
+}
 html.wall-mode [role="dialog"] h2 {
   font-size: 3rem !important;           /* 144px DialogTitle */
   line-height: 1.1 !important;
