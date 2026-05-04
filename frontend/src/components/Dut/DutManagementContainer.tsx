@@ -19,7 +19,7 @@ import { RunInterfaceTestDialog } from "./RunInterfaceTestDialog";
 
 export function DutManagementContainer({ dutType }: { dutType: DutType }) {
   const { duts, isLoading, refresh } = useDutList({ type: dutType });
-  const { create, isCreating } = useDutForm();
+  const { create, isCreating, remove } = useDutForm();
   const { testInterface, isTesting } = useDutInterfaceTest();
   const { refreshAll, isRefreshing } = useDutHealthcheck();
   const { data: sitesData } = useSites();
@@ -30,6 +30,22 @@ export function DutManagementContainer({ dutType }: { dutType: DutType }) {
   const [selected, setSelected] = useState<Dut | null>(null);
   const [testResult, setTestResult] = useState<InterfaceTestResult | null>(null);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const deleteOne = async (d: Dut) => {
+    if (!confirm(`確定刪除 DUT「${d.name}」?`)) return;
+    setDeletingId(d.id);
+    try {
+      await remove(d.id);
+      await refresh();
+      if (selected?.id === d.id) {
+        setSelected(null);
+        setTestResult(null);
+      }
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const refreshOne = async (d: Dut) => {
     setRefreshingId(d.id);
@@ -81,7 +97,9 @@ export function DutManagementContainer({ dutType }: { dutType: DutType }) {
             setTestResult(null);
           }}
           onRefresh={refreshOne}
+          onDelete={deleteOne}
           refreshingId={refreshingId}
+          deletingId={deletingId}
           actions={
             <>
               <Button

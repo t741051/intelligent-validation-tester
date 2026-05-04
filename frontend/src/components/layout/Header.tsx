@@ -1,5 +1,5 @@
 "use client";
-import { LogOut, Menu, Tv, Tv2 } from "lucide-react";
+import { LogOut, Menu, SquareDashed, Tv, Tv2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ export function Header() {
   const toggleSidebar = useUiStore((s) => s.toggleSidebar);
   const isWall = useWallModeStore((s) => s.isWall);
   const toggleWall = useWallModeStore((s) => s.toggle);
+  const showBezels = useWallModeStore((s) => s.showBezels);
+  const toggleBezels = useWallModeStore((s) => s.toggleBezels);
   const pathname = usePathname() ?? "";
   const { title, subtitle, accent } = getPageMeta(pathname);
 
@@ -34,6 +36,17 @@ export function Header() {
         )}
       </div>
       <div className="flex items-center gap-3">
+        {isWall && (
+          <Button
+            variant={showBezels ? "default" : "ghost"}
+            size="sm"
+            onClick={toggleBezels}
+            title={showBezels ? "隱藏電視框線" : "顯示電視框線"}
+          >
+            <SquareDashed className="h-4 w-4 mr-2" />
+            {showBezels ? "框線中" : "框線"}
+          </Button>
+        )}
         <Button
           variant={isWall ? "default" : "ghost"}
           size="sm"

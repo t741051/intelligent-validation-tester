@@ -4,8 +4,11 @@ import { persist } from "zustand/middleware";
 
 type WallModeState = {
   isWall: boolean;
+  /** 是否顯示 bezel 視覺指示線(電視牆模式下的開發參考用)。 */
+  showBezels: boolean;
   toggle: () => void;
   setWall: (v: boolean) => void;
+  toggleBezels: () => void;
 };
 
 /**
@@ -21,8 +24,10 @@ export const useWallModeStore = create<WallModeState>()(
   persist(
     (set) => ({
       isWall: false,
+      showBezels: true,
       toggle: () => set((s) => ({ isWall: !s.isWall })),
       setWall: (v) => set({ isWall: v }),
+      toggleBezels: () => set((s) => ({ showBezels: !s.showBezels })),
     }),
     { name: "ivt-wall-mode" },
   ),

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 
-import { useIsWallMode } from "@/stores/wallModeStore";
+import { useIsWallMode, useWallModeStore } from "@/stores/wallModeStore";
 
 const WALL_W = 11520;
 const WALL_H = 3240;
@@ -14,6 +14,7 @@ const WALL_H = 3240;
  */
 export function WallModeApplier() {
   const isWall = useIsWallMode();
+  const showBezels = useWallModeStore((s) => s.showBezels);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -37,6 +38,14 @@ export function WallModeApplier() {
     window.addEventListener("resize", apply);
     return () => window.removeEventListener("resize", apply);
   }, [isWall]);
+
+  // Toggle bezel-overlay visibility independently of wall mode itself.
+  useEffect(() => {
+    document.documentElement.classList.toggle(
+      "bezels-hidden",
+      isWall && !showBezels,
+    );
+  }, [isWall, showBezels]);
 
   return null;
 }

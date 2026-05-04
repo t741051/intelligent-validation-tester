@@ -1,5 +1,5 @@
 "use client";
-import { Eye, Pencil, RefreshCw } from "lucide-react";
+import { Eye, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { StatusBadge } from "@/components/common/StatusBadge";
@@ -17,7 +17,9 @@ type Props = {
   selectedId: string | null;
   onSelect: (dut: Dut) => void;
   onRefresh?: (dut: Dut) => void;
+  onDelete?: (dut: Dut) => void;
   refreshingId?: string | null;
+  deletingId?: string | null;
   /** Optional toolbar shown next to the card title — e.g. 刷新狀態 / 新增 DUT */
   actions?: ReactNode;
 };
@@ -30,7 +32,8 @@ function responseTimeClass(ms: number | null) {
 }
 
 export function DutList({
-  duts, isLoading, selectedId, onSelect, onRefresh, refreshingId, actions,
+  duts, isLoading, selectedId, onSelect, onRefresh, onDelete,
+  refreshingId, deletingId, actions,
 }: Props) {
   return (
     <Card>
@@ -120,6 +123,19 @@ export function DutList({
                           <Button size="icon" variant="ghost" disabled aria-label="編輯">
                             <Pencil className="w-4 h-4" />
                           </Button>
+                          {onDelete && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={(e) => { e.stopPropagation(); onDelete(d); }}
+                              disabled={deletingId === d.id}
+                              aria-label="刪除"
+                              title="刪除"
+                              className="text-danger hover:bg-danger/10 hover:text-danger"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -118,9 +118,23 @@ html.wall-mode main > p:first-of-type {
 
 /* PageHeader is a flex row with `justify-between` between <h1> and the
    children (banner / buttons). With <h1> hidden in wall mode the flex
-   layout collapses to a single child — push it right. */
+   layout collapses to a single child — push it right. Also kill the
+   bottom margin (mb-4 / md:mb-6) so the page content can start higher,
+   otherwise table headers tend to land on the y=1080 horizontal bezel. */
 html.wall-mode main > div:has(> h1) {
   justify-content: flex-end !important;
+  margin-bottom: 0 !important;
+}
+
+/* Cards in wall mode: tighten the CardHeader so first row of table content
+   below also moves up — Tailwind p-6 = 72px wall, more than needed. */
+html.wall-mode .dut-list-table {
+  /* anchor selector for the rule below */
+}
+html.wall-mode :where(.dut-list-table) thead th,
+html.wall-mode :where(.dut-list-table) tbody td {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
 }
 
 /* === Sidebar === */
@@ -410,6 +424,12 @@ html.wall-mode textarea {
   line-height: 1.2 !important;
 }
 
+/* Toggle bezel guides off via Header button — set on <html> by WallModeApplier
+   when showBezels is false. Used to preview the layout without the dev guides. */
+html.bezels-hidden body::before {
+  display: none !important;
+}
+
 /* Bezel guides — sit on top of content as REFERENCE, so content that lands
    on a bezel position is visually obvious. They don't block clicks
    (pointer-events: none). Production wall display: switch this off. */
@@ -428,9 +448,10 @@ html.wall-mode body::before {
     linear-gradient(to right, transparent 5754px, rgba(255,255,255,0.85) 5754px, rgba(255,255,255,0.85) 5766px, transparent 5766px),
     linear-gradient(to right, transparent 7674px, rgba(255,255,255,0.85) 7674px, rgba(255,255,255,0.85) 7686px, transparent 7686px),
     linear-gradient(to right, transparent 9594px, rgba(255,255,255,0.85) 9594px, rgba(255,255,255,0.85) 9606px, transparent 9606px),
-    /* Horizontal bezels at y = 1080, 2160 */
+    /* Horizontal bezels at y = 1080, 2160; bottom edge at y = 3240 */
     linear-gradient(to bottom, transparent 1074px, rgba(255,255,255,0.85) 1074px, rgba(255,255,255,0.85) 1086px, transparent 1086px),
-    linear-gradient(to bottom, transparent 2154px, rgba(255,255,255,0.85) 2154px, rgba(255,255,255,0.85) 2166px, transparent 2166px);
+    linear-gradient(to bottom, transparent 2154px, rgba(255,255,255,0.85) 2154px, rgba(255,255,255,0.85) 2166px, transparent 2166px),
+    linear-gradient(to bottom, transparent 3228px, rgba(255,255,255,0.85) 3228px, rgba(255,255,255,0.85) 3240px, transparent 3240px);
   background-repeat: no-repeat;
 }
 
